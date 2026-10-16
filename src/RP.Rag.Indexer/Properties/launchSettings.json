@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "RP.Rag.Indexer": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

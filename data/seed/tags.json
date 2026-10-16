@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "name": "wireless"
+  },
+  {
+    "id": 2,
+    "name": "bluetooth"
+  },
+  {
+    "id": 3,
+    "name": "noise-cancelling"
+  },
+  {
+    "id": 4,
+    "name": "over-ear"
+  },
+  {
+    "id": 5,
+    "name": "in-ear"
+  },
+  {
+    "id": 6,
+    "name": "gaming"
+  },
+  {
+    "id": 7,
+    "name": "portable"
+  },
+  {
+    "id": 8,
+    "name": "waterproof"
+  },
+  {
+    "id": 9,
+    "name": "usb-c"
+  },
+  {
+    "id": 10,
+    "name": "fast-charging"
+  },
+  {
+    "id": 11,
+    "name": "mechanical"
+  },
+  {
+    "id": 12,
+    "name": "rgb"
+  },
+  {
+    "id": 13,
+    "name": "ergonomic"
+  },
+  {
+    "id": 14,
+    "name": "rechargeable"
+  },
+  {
+    "id": 15,
+    "name": "smart"
+  },
+  {
+    "id": 16,
+    "name": "compact"
+  },
+  {
+    "id": 17,
+    "name": "lightweight"
+  },
+  {
+    "id": 18,
+    "name": "premium"
+  },
+  {
+    "id": 19,
+    "name": "budget"
+  },
+  {
+    "id": 20,
+    "name": "professional"
+  }
+]

@@ -1,0 +1,28 @@
+<Solution>
+  <Folder Name="/data/">
+    <File Path="example_query.md" />
+  </Folder>
+  <Folder Name="/data/seed/">
+    <File Path="data/seed/categories.json" />
+    <File Path="data/seed/products.json" />
+    <File Path="data/seed/queries.json" />
+    <File Path="data/seed/tags.json" />
+  </Folder>
+  <Folder Name="/data/seed/persian/">
+    <File Path="data/seed/categories_fa.json" />
+    <File Path="data/seed/products_fa.json" />
+    <File Path="data/seed/queries_fa.json" />
+    <File Path="data/seed/tags_fa.json" />
+  </Folder>
+  <Folder Name="/docker/">
+    <File Path="docker-compose.yml" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/RP.Rag.Api/RP.Rag.Api.csproj" Id="2089cc9f-45af-42a7-9218-eb9a1a51dcf8" />
+    <Project Path="src/RP.Rag.Application/RP.Rag.Application.csproj" Id="712bb674-5a5b-4a79-9b23-858634fbca5a" />
+    <Project Path="src/RP.Rag.Domain/RP.Rag.Domain.csproj" Id="91905e32-d9e2-4e66-bd18-df01c6a1ab46" />
+    <Project Path="src/RP.Rag.Indexer/RP.Rag.Indexer.csproj" Id="0fe27b6f-f502-4c67-ae02-cd9372e65101" />
+    <Project Path="src/RP.Rag.Infrastructure/RP.Rag.Infrastructure.csproj" Id="4909c678-7182-4383-85ee-605afbca2086" />
+  </Folder>
+  <Folder Name="/tests/" />
+</Solution>

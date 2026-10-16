@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "name": "Headphones",
+    "description": "Over-ear, on-ear, and in-ear headphones for personal listening."
+  },
+  {
+    "id": 2,
+    "name": "Laptops",
+    "description": "Portable computers for work, study, and gaming."
+  },
+  {
+    "id": 3,
+    "name": "Smartphones",
+    "description": "Mobile phones with modern operating systems and app ecosystems."
+  },
+  {
+    "id": 4,
+    "name": "Cameras",
+    "description": "DSLR, mirrorless, and compact cameras for photography."
+  },
+  {
+    "id": 5,
+    "name": "Keyboards",
+    "description": "Mechanical, membrane, and wireless keyboards."
+  },
+  {
+    "id": 6,
+    "name": "Mice",
+    "description": "Wired and wireless computer mice for productivity and gaming."
+  },
+  {
+    "id": 7,
+    "name": "Monitors",
+    "description": "Computer displays for office, design, and gaming."
+  },
+  {
+    "id": 8,
+    "name": "Speakers",
+    "description": "Bluetooth, portable, and desktop speakers."
+  },
+  {
+    "id": 9,
+    "name": "Tablets",
+    "description": "Touchscreen tablets for reading, drawing, and media."
+  },
+  {
+    "id": 10,
+    "name": "Smartwatches",
+    "description": "Wearable smartwatches with fitness and notification features."
+  },
+  {
+    "id": 11,
+    "name": "Chargers",
+    "description": "Wall chargers, power banks, and wireless charging pads."
+  },
+  {
+    "id": 12,
+    "name": "Cables",
+    "description": "USB-C, Lightning, HDMI, and other connectivity cables."
+  },
+  {
+    "id": 13,
+    "name": "Storage",
+    "description": "External SSDs, HDDs, and USB flash drives."
+  },
+  {
+    "id": 14,
+    "name": "Networking",
+    "description": "Routers, mesh systems, and network switches."
+  },
+  {
+    "id": 15,
+    "name": "Gaming",
+    "description": "Consoles, controllers, and gaming accessories."
+  },
+  {
+    "id": 16,
+    "name": "Smart Home",
+    "description": "Smart bulbs, plugs, and home automation devices."
+  },
+  {
+    "id": 17,
+    "name": "Office",
+    "description": "Office chairs, desks, and productivity accessories."
+  },
+  {
+    "id": 18,
+    "name": "Audio Accessories",
+    "description": "Ear pads, cables, and stands for audio equipment."
+  }
+]

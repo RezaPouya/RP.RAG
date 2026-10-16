@@ -1,0 +1,25 @@
+@host = http://localhost:5290
+
+GET {{host}}/api/search/lexical?q=wireless headphones&topK=5
+
+###
+
+GET {{host}}/api/search/semantic?q=a tablet that charges very quickly&topK=5
+
+###
+
+GET {{host}}/api/search/hybrid?q=budget motion sensor&topK=5
+
+###
+
+GET {{host}}/api/search/lexical?q=گوشی سامسونگ&topK=5
+
+###
+
+POST {{host}}/api/ask
+Content-Type: application/json
+
+{
+  "question": "Which phone has a high-end feel and what is the warranty?",
+  "topK": 4
+}

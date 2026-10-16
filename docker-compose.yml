@@ -1,0 +1,65 @@
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.6-pg16
+    container_name: rp_rag_postgres
+    environment:
+      POSTGRES_DB: rp_rag_db
+      POSTGRES_USER: rp_user
+      POSTGRES_PASSWORD: rp_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - rp_rag_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rp_user -d rp_rag_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  elasticsearch:
+    image: elasticsearch:9.5.3
+    container_name: rp_rag_es
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+    ports:
+      - "9200:9200"
+    volumes:
+      - rp_rag_es_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  # Ollama is not started here because it already runs on the host machine, where it
+  # uses the GPU directly and reuses the models that are already downloaded.
+  # To run it in Docker instead, uncomment this service and the volume below, then pull
+  # the models:
+  #   docker exec rp_rag_ollama ollama pull bge-m3
+  #   docker exec rp_rag_ollama ollama pull gemma4:e4b
+  #
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: rp_rag_ollama
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - rp_rag_ollama_data:/root/.ollama
+  #   restart: unless-stopped
+  #   # NVIDIA GPU (needs the NVIDIA Container Toolkit):
+  #   # deploy:
+  #   #   resources:
+  #   #     reservations:
+  #   #       devices:
+  #   #         - driver: nvidia
+  #   #           count: all
+  #   #           capabilities: [gpu]
+
+volumes:
+  rp_rag_pg_data:
+  rp_rag_es_data:
+  # rp_rag_ollama_data:

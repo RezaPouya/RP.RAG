@@ -1,0 +1,4550 @@
+[
+  {
+    "id": 1,
+    "query": "budget motion sensor",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      29,
+      187,
+      262,
+      487,
+      670,
+      775
+    ]
+  },
+  {
+    "id": 2,
+    "query": "I need a tablet that charges very quickly",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      8,
+      112,
+      156,
+      326,
+      344,
+      443,
+      493,
+      540,
+      576,
+      584
+    ]
+  },
+  {
+    "id": 3,
+    "query": "I need a smartphone with a high-end feel",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      83,
+      94,
+      119,
+      159,
+      167,
+      215,
+      299,
+      303,
+      393,
+      396
+    ]
+  },
+  {
+    "id": 4,
+    "query": "best travel router for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      545,
+      552
+    ]
+  },
+  {
+    "id": 5,
+    "query": "rechargeable desktop speakers",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      84,
+      143,
+      165,
+      194,
+      480
+    ]
+  },
+  {
+    "id": 6,
+    "query": "best motion sensor for cable-free use",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      29,
+      262,
+      548,
+      854
+    ]
+  },
+  {
+    "id": 7,
+    "query": "best car charger for daily use without replacing batteries",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      57,
+      616
+    ]
+  },
+  {
+    "id": 8,
+    "query": "Bluefin Ultra SE",
+    "queryType": "exact",
+    "relevantProductIds": [
+      650
+    ]
+  },
+  {
+    "id": 9,
+    "query": "best desktop speakers for a colorful setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      165,
+      636,
+      785,
+      905
+    ]
+  },
+  {
+    "id": 10,
+    "query": "I need a smart home device with a high-end feel",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      30,
+      77,
+      98,
+      102,
+      483,
+      503,
+      581,
+      630,
+      714,
+      782
+    ]
+  },
+  {
+    "id": 11,
+    "query": "AA-ORBON-0951",
+    "queryType": "exact",
+    "relevantProductIds": [
+      976
+    ]
+  },
+  {
+    "id": 12,
+    "query": "best Ethernet cable for quick top-ups",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      409,
+      535,
+      652,
+      696
+    ]
+  },
+  {
+    "id": 13,
+    "query": "I need a tablet that is very light",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      38,
+      73,
+      131,
+      156,
+      168,
+      185,
+      271,
+      307,
+      326,
+      368
+    ]
+  },
+  {
+    "id": 14,
+    "query": "Kestrel Lite Pro Lightning Cable",
+    "queryType": "exact",
+    "relevantProductIds": [
+      153
+    ]
+  },
+  {
+    "id": 15,
+    "query": "best gaming laptop for USB-C devices",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      101,
+      400,
+      575,
+      643,
+      685,
+      903
+    ]
+  },
+  {
+    "id": 16,
+    "query": "wireless Bluetooth speaker",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      161,
+      196,
+      252,
+      295,
+      569,
+      632,
+      669,
+      753,
+      780,
+      894
+    ]
+  },
+  {
+    "id": 17,
+    "query": "best ergonomic office chair for daily use without replacing batteries",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      574,
+      654,
+      809
+    ]
+  },
+  {
+    "id": 18,
+    "query": "best robot vacuum for a colorful setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      441,
+      511,
+      677,
+      714
+    ]
+  },
+  {
+    "id": 19,
+    "query": "SH-GLAON-0887",
+    "queryType": "exact",
+    "relevantProductIds": [
+      974
+    ]
+  },
+  {
+    "id": 20,
+    "query": "fast-charging braided charging cable",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      129,
+      470,
+      925,
+      989
+    ]
+  },
+  {
+    "id": 21,
+    "query": "bluetooth carry case",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      193,
+      272,
+      325,
+      615,
+      818
+    ]
+  },
+  {
+    "id": 22,
+    "query": "I need a laptop with colorful lighting",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      4,
+      146,
+      244,
+      324,
+      342,
+      351,
+      400,
+      406,
+      474,
+      646
+    ]
+  },
+  {
+    "id": 23,
+    "query": "I need a smartwatch that charges very quickly",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      17,
+      169,
+      195,
+      236,
+      274,
+      289,
+      411,
+      454,
+      471,
+      592
+    ]
+  },
+  {
+    "id": 24,
+    "query": "portable handheld gaming console",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      296,
+      507,
+      725,
+      994
+    ]
+  },
+  {
+    "id": 25,
+    "query": "best creator laptop for a colorful setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      324,
+      351,
+      658,
+      899,
+      942
+    ]
+  },
+  {
+    "id": 26,
+    "query": "best magnetic charger for cable-free use",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      294,
+      332,
+      634
+    ]
+  },
+  {
+    "id": 27,
+    "query": "premium GaN wall charger",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      26,
+      55,
+      519,
+      626,
+      736,
+      858
+    ]
+  },
+  {
+    "id": 28,
+    "query": "best party speaker for pairing with my phone",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      423,
+      770,
+      920
+    ]
+  },
+  {
+    "id": 29,
+    "query": "best security camera for pairing with my phone",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      191,
+      558,
+      642,
+      659
+    ]
+  },
+  {
+    "id": 30,
+    "query": "Quanta Max Mini",
+    "queryType": "exact",
+    "relevantProductIds": [
+      373
+    ]
+  },
+  {
+    "id": 31,
+    "query": "I need a smartphone that is cheap and good value",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      51,
+      107,
+      145,
+      176,
+      359,
+      414,
+      523,
+      530,
+      572,
+      619
+    ]
+  },
+  {
+    "id": 32,
+    "query": "usb-c instant camera",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      171,
+      183,
+      263,
+      624,
+      871
+    ]
+  },
+  {
+    "id": 33,
+    "query": "usb-c streaming capture card",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      33,
+      335,
+      588
+    ]
+  },
+  {
+    "id": 34,
+    "query": "best entry-level smartphone for saving money",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      619,
+      839,
+      938
+    ]
+  },
+  {
+    "id": 35,
+    "query": "budget Ethernet cable",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      409,
+      479,
+      652,
+      675,
+      696,
+      996
+    ]
+  },
+  {
+    "id": 36,
+    "query": "Cobalt Ultra Pro Motion Sensor",
+    "queryType": "exact",
+    "relevantProductIds": [
+      581
+    ]
+  },
+  {
+    "id": 37,
+    "query": "best fitness smartwatch for travel",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      53,
+      679,
+      772
+    ]
+  },
+  {
+    "id": 38,
+    "query": "best mobile hotspot for saving money",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      434,
+      705,
+      766,
+      778,
+      909
+    ]
+  },
+  {
+    "id": 39,
+    "query": "premium 27-inch monitor",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      65,
+      457,
+      706,
+      743,
+      865
+    ]
+  },
+  {
+    "id": 40,
+    "query": "portable travel mouse",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      69,
+      70,
+      116,
+      465,
+      501,
+      578,
+      587,
+      771,
+      902,
+      919
+    ]
+  },
+  {
+    "id": 41,
+    "query": "I need a smart home device with colorful lighting",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      30,
+      441,
+      511,
+      597,
+      666,
+      677,
+      714,
+      727,
+      873,
+      907
+    ]
+  },
+  {
+    "id": 42,
+    "query": "best vlogging camera for carrying all day",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      47,
+      432,
+      644,
+      928
+    ]
+  },
+  {
+    "id": 43,
+    "query": "I need an office product for professional work",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      5,
+      91,
+      121,
+      285,
+      297,
+      316,
+      345,
+      459,
+      506,
+      574
+    ]
+  },
+  {
+    "id": 44,
+    "query": "best webcam for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      258,
+      620
+    ]
+  },
+  {
+    "id": 45,
+    "query": "Sonara Lite II",
+    "queryType": "exact",
+    "relevantProductIds": [
+      104
+    ]
+  },
+  {
+    "id": 46,
+    "query": "bluetooth productivity mouse",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      211,
+      401,
+      885,
+      893
+    ]
+  },
+  {
+    "id": 47,
+    "query": "SK-LUMON-0395",
+    "queryType": "exact",
+    "relevantProductIds": [
+      196
+    ]
+  },
+  {
+    "id": 48,
+    "query": "I need a gaming accessory with colorful lighting",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      106,
+      267,
+      270,
+      337,
+      458,
+      499,
+      500,
+      553,
+      588,
+      639
+    ]
+  },
+  {
+    "id": 49,
+    "query": "I need a monitor that charges over USB-C",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      59,
+      75,
+      82,
+      190,
+      219,
+      256,
+      268,
+      317,
+      328,
+      340
+    ]
+  },
+  {
+    "id": 50,
+    "query": "best on-ear headphones for carrying all day",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      34,
+      372,
+      445
+    ]
+  },
+  {
+    "id": 51,
+    "query": "Zenith Prime Mini Shower Speaker",
+    "queryType": "exact",
+    "relevantProductIds": [
+      1
+    ]
+  },
+  {
+    "id": 52,
+    "query": "best magnetic charging cable for USB-C devices",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      413,
+      957,
+      961
+    ]
+  },
+  {
+    "id": 53,
+    "query": "wireless smart plug",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      431,
+      832
+    ]
+  },
+  {
+    "id": 54,
+    "query": "wireless compact camera",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      79,
+      339,
+      397,
+      945
+    ]
+  },
+  {
+    "id": 55,
+    "query": "best hybrid smartwatch for quick top-ups",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      289,
+      592,
+      984
+    ]
+  },
+  {
+    "id": 56,
+    "query": "best mirrorless camera for carrying all day",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      485,
+      586,
+      843,
+      883
+    ]
+  },
+  {
+    "id": 57,
+    "query": "best smart door lock for pairing with my phone",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      30,
+      958
+    ]
+  },
+  {
+    "id": 58,
+    "query": "I need a smart home device with a built-in battery I can recharge",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      7,
+      19,
+      98,
+      245,
+      261,
+      301,
+      483,
+      487,
+      727,
+      767
+    ]
+  },
+  {
+    "id": 59,
+    "query": "compact 2-in-1 convertible laptop",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      162,
+      646,
+      827,
+      936
+    ]
+  },
+  {
+    "id": 60,
+    "query": "portable travel charger kit",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      18,
+      178,
+      224,
+      300,
+      331,
+      751
+    ]
+  },
+  {
+    "id": 61,
+    "query": "smart party speaker",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      348,
+      423,
+      770
+    ]
+  },
+  {
+    "id": 62,
+    "query": "I need a charger with a high-end feel",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      13,
+      18,
+      26,
+      55,
+      58,
+      92,
+      178,
+      218,
+      331,
+      375
+    ]
+  },
+  {
+    "id": 63,
+    "query": "best portable monitor for a colorful setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      75,
+      317,
+      596
+    ]
+  },
+  {
+    "id": 64,
+    "query": "best replacement ear pads for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      110,
+      115,
+      407,
+      520
+    ]
+  },
+  {
+    "id": 65,
+    "query": "budget gaming router",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      166,
+      623,
+      704,
+      912
+    ]
+  },
+  {
+    "id": 66,
+    "query": "best streaming capture card for long working hours",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      33,
+      335
+    ]
+  },
+  {
+    "id": 67,
+    "query": "best gaming keyboard for saving money",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      43,
+      209,
+      710,
+      880
+    ]
+  },
+  {
+    "id": 68,
+    "query": "MS-HALED-0325",
+    "queryType": "exact",
+    "relevantProductIds": [
+      69
+    ]
+  },
+  {
+    "id": 69,
+    "query": "OF-JETPR-0904",
+    "queryType": "exact",
+    "relevantProductIds": [
+      64
+    ]
+  },
+  {
+    "id": 70,
+    "query": "CB-VERUL-0651",
+    "queryType": "exact",
+    "relevantProductIds": [
+      409
+    ]
+  },
+  {
+    "id": 71,
+    "query": "rechargeable membrane keyboard",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      117,
+      334,
+      367,
+      817,
+      972
+    ]
+  },
+  {
+    "id": 72,
+    "query": "I need a smartwatch that connects over Bluetooth",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      48,
+      76,
+      109,
+      120,
+      126,
+      290,
+      411,
+      424,
+      454,
+      471
+    ]
+  },
+  {
+    "id": 73,
+    "query": "NW-PULPL-0749",
+    "queryType": "exact",
+    "relevantProductIds": [
+      922
+    ]
+  },
+  {
+    "id": 74,
+    "query": "CH-SONAI-0568",
+    "queryType": "exact",
+    "relevantProductIds": [
+      616
+    ]
+  },
+  {
+    "id": 75,
+    "query": "budget robot vacuum",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      19,
+      313,
+      441,
+      677
+    ]
+  },
+  {
+    "id": 76,
+    "query": "budget rugged tablet",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      38,
+      576,
+      629,
+      803
+    ]
+  },
+  {
+    "id": 77,
+    "query": "best NAS drive for professional work",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      3,
+      260,
+      376,
+      731,
+      846
+    ]
+  },
+  {
+    "id": 78,
+    "query": "fast-charging Lightning cable",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      127,
+      214,
+      796,
+      837,
+      991
+    ]
+  },
+  {
+    "id": 79,
+    "query": "premium rugged smartphone",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      303,
+      469,
+      473,
+      544,
+      664
+    ]
+  },
+  {
+    "id": 80,
+    "query": "best microphone boom arm for saving money",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      760,
+      944,
+      988
+    ]
+  },
+  {
+    "id": 81,
+    "query": "I need a cable for professional work",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      153,
+      298,
+      774,
+      796
+    ]
+  },
+  {
+    "id": 82,
+    "query": "Onyx Elite SE Gaming Keyboard",
+    "queryType": "exact",
+    "relevantProductIds": [
+      356
+    ]
+  },
+  {
+    "id": 83,
+    "query": "bluetooth smart bulb",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      618,
+      666,
+      820,
+      895,
+      907,
+      971
+    ]
+  },
+  {
+    "id": 84,
+    "query": "gaming Wi-Fi 6 router",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      93,
+      170,
+      886
+    ]
+  },
+  {
+    "id": 85,
+    "query": "best mesh Wi-Fi system for small desks",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      71,
+      498
+    ]
+  },
+  {
+    "id": 86,
+    "query": "best DSLR camera for outdoor use",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      450,
+      509
+    ]
+  },
+  {
+    "id": 87,
+    "query": "best travel charger kit for small desks",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      18,
+      178,
+      224,
+      300
+    ]
+  },
+  {
+    "id": 88,
+    "query": "I need a speaker that can survive getting wet",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      103,
+      143,
+      161,
+      196,
+      410,
+      460,
+      468,
+      491,
+      542,
+      580
+    ]
+  },
+  {
+    "id": 89,
+    "query": "best HDMI 2.1 cable for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      21,
+      157,
+      248,
+      559
+    ]
+  },
+  {
+    "id": 90,
+    "query": "gaming console charging dock",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      188,
+      247,
+      333,
+      538,
+      612
+    ]
+  },
+  {
+    "id": 91,
+    "query": "I need an audio accessory without any cables",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      67,
+      110,
+      113,
+      203,
+      206,
+      230,
+      251,
+      265,
+      272,
+      529
+    ]
+  },
+  {
+    "id": 92,
+    "query": "professional ergonomic office chair",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      121,
+      574,
+      915
+    ]
+  },
+  {
+    "id": 93,
+    "query": "best braided charging cable for travel",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      470,
+      721,
+      774
+    ]
+  },
+  {
+    "id": 94,
+    "query": "bluetooth sport earphones",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      68,
+      204,
+      541,
+      761,
+      884
+    ]
+  },
+  {
+    "id": 95,
+    "query": "best drawing tablet for long working hours",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      225,
+      435
+    ]
+  },
+  {
+    "id": 96,
+    "query": "gaming student laptop",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      15,
+      95,
+      474
+    ]
+  },
+  {
+    "id": 97,
+    "query": "GM-NIMLI-0796",
+    "queryType": "exact",
+    "relevantProductIds": [
+      697
+    ]
+  },
+  {
+    "id": 98,
+    "query": "usb-c headphone stand",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      529,
+      593,
+      599,
+      889,
+      985
+    ]
+  },
+  {
+    "id": 99,
+    "query": "professional ultrawide monitor",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      82,
+      213,
+      352,
+      398
+    ]
+  },
+  {
+    "id": 100,
+    "query": "best handheld gaming console for long working hours",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      296,
+      507,
+      725
+    ]
+  },
+  {
+    "id": 101,
+    "query": "best over-ear headphones for noisy commutes",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      175,
+      463,
+      502,
+      667,
+      917
+    ]
+  },
+  {
+    "id": 102,
+    "query": "portable DisplayPort cable",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      140,
+      892
+    ]
+  },
+  {
+    "id": 103,
+    "query": "I need a tablet that is comfortable for long hours",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      112,
+      131,
+      137,
+      210,
+      225,
+      284,
+      312,
+      327,
+      435,
+      493
+    ]
+  },
+  {
+    "id": 104,
+    "query": "I need a tablet with a built-in battery I can recharge",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      73,
+      137,
+      144,
+      160,
+      242,
+      318,
+      326,
+      420,
+      493,
+      543
+    ]
+  },
+  {
+    "id": 105,
+    "query": "best ergonomic split keyboard for a colorful setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      2,
+      692,
+      962,
+      979
+    ]
+  },
+  {
+    "id": 106,
+    "query": "CM-QUAUL-0188",
+    "queryType": "exact",
+    "relevantProductIds": [
+      633
+    ]
+  },
+  {
+    "id": 107,
+    "query": "I need a charger that takes up very little space",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      13,
+      18,
+      55,
+      152,
+      178,
+      224,
+      250,
+      300,
+      370,
+      375
+    ]
+  },
+  {
+    "id": 108,
+    "query": "best in-ear earbuds for outdoor use",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      124,
+      155,
+      330,
+      779,
+      781
+    ]
+  },
+  {
+    "id": 109,
+    "query": "rechargeable wireless charging pad",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      13,
+      14,
+      92,
+      152,
+      218,
+      375
+    ]
+  },
+  {
+    "id": 110,
+    "query": "lightweight headphone cable",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      255,
+      311,
+      568,
+      729,
+      940
+    ]
+  },
+  {
+    "id": 111,
+    "query": "best headphone stand for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      62,
+      593,
+      849,
+      889
+    ]
+  },
+  {
+    "id": 112,
+    "query": "best smart thermostat for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      98,
+      102,
+      503,
+      786
+    ]
+  },
+  {
+    "id": 113,
+    "query": "lightweight studio monitor headphones",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      45,
+      360,
+      757,
+      762,
+      797
+    ]
+  },
+  {
+    "id": 114,
+    "query": "best wireless charging pad for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      13,
+      92,
+      218,
+      375
+    ]
+  },
+  {
+    "id": 115,
+    "query": "portable travel router",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      12,
+      545,
+      552,
+      622,
+      908,
+      929
+    ]
+  },
+  {
+    "id": 116,
+    "query": "wireless mesh Wi-Fi system",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      71,
+      498
+    ]
+  },
+  {
+    "id": 117,
+    "query": "best Thunderbolt cable for saving money",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      32,
+      37,
+      341
+    ]
+  },
+  {
+    "id": 118,
+    "query": "lightweight magnetic charger",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      294,
+      415,
+      525,
+      634
+    ]
+  },
+  {
+    "id": 119,
+    "query": "SP-SONAI-0147",
+    "queryType": "exact",
+    "relevantProductIds": [
+      625
+    ]
+  },
+  {
+    "id": 120,
+    "query": "Quasar Studio Pro",
+    "queryType": "exact",
+    "relevantProductIds": [
+      54
+    ]
+  },
+  {
+    "id": 121,
+    "query": "premium magnetic charging cable",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      243,
+      508,
+      550,
+      732
+    ]
+  },
+  {
+    "id": 122,
+    "query": "HP-KINED-0042",
+    "queryType": "exact",
+    "relevantProductIds": [
+      896
+    ]
+  },
+  {
+    "id": 123,
+    "query": "rechargeable GPS smartwatch",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      236,
+      680,
+      845,
+      970
+    ]
+  },
+  {
+    "id": 124,
+    "query": "lightweight smartphone",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      145,
+      663,
+      703
+    ]
+  },
+  {
+    "id": 125,
+    "query": "I need a pair of headphones without any cables",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      27,
+      42,
+      45,
+      124,
+      175,
+      293,
+      338,
+      346,
+      384,
+      427
+    ]
+  },
+  {
+    "id": 126,
+    "query": "I need a cable that is cheap and good value",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      10,
+      32,
+      37,
+      63,
+      127,
+      153,
+      214,
+      298,
+      341,
+      409
+    ]
+  },
+  {
+    "id": 127,
+    "query": "gaming mobile hotspot",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      434,
+      436,
+      705,
+      766,
+      814,
+      909
+    ]
+  },
+  {
+    "id": 128,
+    "query": "rechargeable multi-port desktop charger",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      148,
+      277,
+      549,
+      816,
+      967
+    ]
+  },
+  {
+    "id": 129,
+    "query": "budget monitor arm",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      86,
+      297,
+      631,
+      906,
+      968
+    ]
+  },
+  {
+    "id": 130,
+    "query": "I need a monitor with a high-end feel",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      54,
+      65,
+      75,
+      82,
+      190,
+      213,
+      256,
+      268,
+      279,
+      280
+    ]
+  },
+  {
+    "id": 131,
+    "query": "usb-c ultrabook",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      4,
+      769,
+      792,
+      807,
+      867
+    ]
+  },
+  {
+    "id": 132,
+    "query": "I need a mouse that connects over Bluetooth",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      116,
+      211,
+      235,
+      388,
+      401,
+      433,
+      449,
+      501,
+      610,
+      712
+    ]
+  },
+  {
+    "id": 133,
+    "query": "waterproof hybrid smartwatch",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      130,
+      289,
+      984
+    ]
+  },
+  {
+    "id": 134,
+    "query": "I need a keyboard that is comfortable for long hours",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      43,
+      97,
+      179,
+      209,
+      276,
+      320,
+      334,
+      391,
+      404,
+      475
+    ]
+  },
+  {
+    "id": 135,
+    "query": "professional action camera",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      39,
+      202,
+      233,
+      379,
+      730
+    ]
+  },
+  {
+    "id": 136,
+    "query": "best NVMe internal SSD for small desks",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      264,
+      560,
+      878
+    ]
+  },
+  {
+    "id": 137,
+    "query": "I need a charger that is cheap and good value",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      46,
+      148,
+      250,
+      273,
+      294,
+      466,
+      486,
+      525,
+      749,
+      765
+    ]
+  },
+  {
+    "id": 138,
+    "query": "I need a keyboard with a high-end feel",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      2,
+      31,
+      216,
+      281,
+      336,
+      354,
+      391,
+      412,
+      531,
+      601
+    ]
+  },
+  {
+    "id": 139,
+    "query": "best rugged smartphone for carrying all day",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      107,
+      133,
+      469,
+      664
+    ]
+  },
+  {
+    "id": 140,
+    "query": "best DAC/amp dongle for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      9,
+      151
+    ]
+  },
+  {
+    "id": 141,
+    "query": "NW-BLUUL-0745",
+    "queryType": "exact",
+    "relevantProductIds": [
+      650
+    ]
+  },
+  {
+    "id": 142,
+    "query": "professional footrest",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      5,
+      91,
+      316,
+      345,
+      506,
+      952
+    ]
+  },
+  {
+    "id": 143,
+    "query": "best productivity mouse for long working hours",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      211,
+      329,
+      371,
+      395
+    ]
+  },
+  {
+    "id": 144,
+    "query": "I need a monitor that is comfortable for long hours",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      16,
+      59,
+      213,
+      226,
+      256,
+      280,
+      380,
+      383,
+      398,
+      570
+    ]
+  },
+  {
+    "id": 145,
+    "query": "best student laptop for small desks",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      15,
+      406,
+      720
+    ]
+  },
+  {
+    "id": 146,
+    "query": "premium camera-focused smartphone",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      83,
+      299,
+      477,
+      567,
+      694,
+      969
+    ]
+  },
+  {
+    "id": 147,
+    "query": "bluetooth mechanical keyboard",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      276,
+      369,
+      404,
+      640,
+      959
+    ]
+  },
+  {
+    "id": 148,
+    "query": "premium entry-level smartphone",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      94,
+      735,
+      911
+    ]
+  },
+  {
+    "id": 149,
+    "query": "ergonomic conference speakerphone",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      44,
+      212,
+      490,
+      851
+    ]
+  },
+  {
+    "id": 150,
+    "query": "SP-VERLI-0126",
+    "queryType": "exact",
+    "relevantProductIds": [
+      975
+    ]
+  },
+  {
+    "id": 151,
+    "query": "SP-COBCO-0153",
+    "queryType": "exact",
+    "relevantProductIds": [
+      167
+    ]
+  },
+  {
+    "id": 152,
+    "query": "I need a gaming accessory with a high-end feel",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      28,
+      188,
+      201,
+      240,
+      247,
+      267,
+      337,
+      378,
+      451,
+      507
+    ]
+  },
+  {
+    "id": 153,
+    "query": "premium gaming monitor",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      54,
+      268,
+      279,
+      280,
+      512,
+      689
+    ]
+  },
+  {
+    "id": 154,
+    "query": "rechargeable portable speaker",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      85,
+      386,
+      389,
+      468,
+      812
+    ]
+  },
+  {
+    "id": 155,
+    "query": "Polaris Go SE True Wireless Earbuds",
+    "queryType": "exact",
+    "relevantProductIds": [
+      27
+    ]
+  },
+  {
+    "id": 156,
+    "query": "I need an office product with a built-in battery I can recharge",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      5,
+      44,
+      91,
+      122,
+      258,
+      297,
+      306,
+      319,
+      345,
+      506
+    ]
+  },
+  {
+    "id": 157,
+    "query": "best pro tablet for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      307,
+      310,
+      540
+    ]
+  },
+  {
+    "id": 158,
+    "query": "best multi-port desktop charger for USB-C devices",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      46,
+      148,
+      277,
+      926
+    ]
+  },
+  {
+    "id": 159,
+    "query": "AA-MONED-0984",
+    "queryType": "exact",
+    "relevantProductIds": [
+      818
+    ]
+  },
+  {
+    "id": 160,
+    "query": "gaming over-ear headphones",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      96,
+      175,
+      502,
+      661,
+      917
+    ]
+  },
+  {
+    "id": 161,
+    "query": "MS-KESPL-0292",
+    "queryType": "exact",
+    "relevantProductIds": [
+      528
+    ]
+  },
+  {
+    "id": 162,
+    "query": "best ultrabook for a colorful setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      4,
+      769,
+      792,
+      981
+    ]
+  },
+  {
+    "id": 163,
+    "query": "I need a charger that is very light",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      178,
+      273,
+      292,
+      294,
+      365,
+      415,
+      486,
+      525,
+      554,
+      590
+    ]
+  },
+  {
+    "id": 164,
+    "query": "I need a storage drive that is very light",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      135,
+      147,
+      278,
+      376,
+      494,
+      564,
+      571,
+      829,
+      878,
+      937
+    ]
+  },
+  {
+    "id": 165,
+    "query": "rgb compact 75% keyboard",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      336,
+      514,
+      536,
+      672,
+      825
+    ]
+  },
+  {
+    "id": 166,
+    "query": "best 10-inch tablet for long working hours",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      112,
+      131,
+      327
+    ]
+  },
+  {
+    "id": 167,
+    "query": "usb-c office monitor",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      190,
+      256,
+      521,
+      600,
+      676
+    ]
+  },
+  {
+    "id": 168,
+    "query": "best smart speaker for USB-C devices",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      189,
+      462,
+      518,
+      649,
+      973
+    ]
+  },
+  {
+    "id": 169,
+    "query": "best smart light strip for daily use without replacing batteries",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      261,
+      483,
+      727
+    ]
+  },
+  {
+    "id": 170,
+    "query": "smart drawing tablet",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      225,
+      420,
+      997
+    ]
+  },
+  {
+    "id": 171,
+    "query": "best microSD card for USB-C devices",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      387,
+      492,
+      563,
+      660,
+      931
+    ]
+  },
+  {
+    "id": 172,
+    "query": "best low-profile keyboard for typing",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      205,
+      382,
+      531,
+      534,
+      738
+    ]
+  },
+  {
+    "id": 173,
+    "query": "I need a cable that charges very quickly",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      21,
+      37,
+      127,
+      129,
+      157,
+      214,
+      243,
+      248,
+      349,
+      409
+    ]
+  },
+  {
+    "id": 174,
+    "query": "SP-EMBST-0127",
+    "queryType": "exact",
+    "relevantProductIds": [
+      799
+    ]
+  },
+  {
+    "id": 175,
+    "query": "fast-charging fitness smartwatch",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      17,
+      169,
+      411,
+      454,
+      875
+    ]
+  },
+  {
+    "id": 176,
+    "query": "best shower speaker for a colorful setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      1,
+      192,
+      410
+    ]
+  },
+  {
+    "id": 177,
+    "query": "lightweight 5G smartphone",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      51,
+      88,
+      119,
+      132,
+      223,
+      393,
+      414,
+      918
+    ]
+  },
+  {
+    "id": 178,
+    "query": "rechargeable low-profile keyboard",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      66,
+      216,
+      315,
+      531,
+      534
+    ]
+  },
+  {
+    "id": 179,
+    "query": "best rugged tablet for quick top-ups",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      443,
+      576,
+      838
+    ]
+  },
+  {
+    "id": 180,
+    "query": "best gaming chair for USB-C devices",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      106,
+      270,
+      499
+    ]
+  },
+  {
+    "id": 181,
+    "query": "compact ergonomic vertical mouse",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      22,
+      275,
+      417,
+      422,
+      610,
+      715
+    ]
+  },
+  {
+    "id": 182,
+    "query": "compact replacement ear pads",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      110,
+      257,
+      407,
+      759
+    ]
+  },
+  {
+    "id": 183,
+    "query": "I need a pair of headphones for professional work",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      27,
+      200,
+      747,
+      762
+    ]
+  },
+  {
+    "id": 184,
+    "query": "best USB flash drive for small desks",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      147,
+      269,
+      924
+    ]
+  },
+  {
+    "id": 185,
+    "query": "usb-c NAS drive",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      3,
+      260,
+      377,
+      564,
+      657
+    ]
+  },
+  {
+    "id": 186,
+    "query": "best Wi-Fi extender for a smart home setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      61,
+      78,
+      149
+    ]
+  },
+  {
+    "id": 187,
+    "query": "best action camera for daily use without replacing batteries",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      202,
+      233,
+      322,
+      824
+    ]
+  },
+  {
+    "id": 188,
+    "query": "best game controller for long working hours",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      378,
+      639,
+      787
+    ]
+  },
+  {
+    "id": 189,
+    "query": "I need a pair of headphones that can survive getting wet",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      124,
+      155,
+      330,
+      338,
+      358,
+      360,
+      384,
+      637,
+      667,
+      761
+    ]
+  },
+  {
+    "id": 190,
+    "query": "I need a pair of headphones with a high-end feel",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      293,
+      338,
+      497,
+      585,
+      598,
+      661,
+      757,
+      779,
+      869,
+      977
+    ]
+  },
+  {
+    "id": 191,
+    "query": "rechargeable gaming keyboard",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      43,
+      259,
+      710,
+      880
+    ]
+  },
+  {
+    "id": 192,
+    "query": "best arcade fight stick for saving money",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      246,
+      357,
+      438,
+      697,
+      946,
+      978
+    ]
+  },
+  {
+    "id": 193,
+    "query": "best 11-inch tablet for cable-free use",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      128,
+      177,
+      866
+    ]
+  },
+  {
+    "id": 194,
+    "query": "I need a networking device good for playing games",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      93,
+      166,
+      170,
+      392,
+      434,
+      436,
+      488,
+      622,
+      623,
+      704
+    ]
+  },
+  {
+    "id": 195,
+    "query": "best external hard drive for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      421,
+      494,
+      673
+    ]
+  },
+  {
+    "id": 196,
+    "query": "premium gaming laptop",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      101,
+      105,
+      439,
+      643,
+      651,
+      685,
+      777,
+      806,
+      903
+    ]
+  },
+  {
+    "id": 197,
+    "query": "gaming 4K design monitor",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      219,
+      226,
+      282,
+      353,
+      526,
+      611
+    ]
+  },
+  {
+    "id": 198,
+    "query": "best video doorbell for saving money",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      453,
+      744,
+      974
+    ]
+  },
+  {
+    "id": 199,
+    "query": "I need a smart home device that connects over Bluetooth",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      7,
+      19,
+      30,
+      138,
+      431,
+      472,
+      511,
+      548,
+      581,
+      618
+    ]
+  },
+  {
+    "id": 200,
+    "query": "I need a smartphone that is very light",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      51,
+      83,
+      88,
+      107,
+      108,
+      119,
+      132,
+      133,
+      145,
+      223
+    ]
+  },
+  {
+    "id": 201,
+    "query": "premium 10-inch tablet",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      185,
+      254,
+      318,
+      768
+    ]
+  },
+  {
+    "id": 202,
+    "query": "best smartphone for outdoor use",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      145,
+      625
+    ]
+  },
+  {
+    "id": 203,
+    "query": "CB-LATCO-0647",
+    "queryType": "exact",
+    "relevantProductIds": [
+      892
+    ]
+  },
+  {
+    "id": 204,
+    "query": "bluetooth smart light strip",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      138,
+      472,
+      727,
+      1000
+    ]
+  },
+  {
+    "id": 205,
+    "query": "best desk lamp for carrying all day",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      266,
+      573,
+      606
+    ]
+  },
+  {
+    "id": 206,
+    "query": "I need a laptop that charges over USB-C",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      4,
+      95,
+      101,
+      125,
+      342,
+      400,
+      513,
+      557,
+      575,
+      643
+    ]
+  },
+  {
+    "id": 207,
+    "query": "SP-KINEL-0150",
+    "queryType": "exact",
+    "relevantProductIds": [
+      107
+    ]
+  },
+  {
+    "id": 208,
+    "query": "I need an audio accessory that is cheap and good value",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      67,
+      80,
+      113,
+      203,
+      206,
+      222,
+      241,
+      257,
+      314,
+      325
+    ]
+  },
+  {
+    "id": 209,
+    "query": "best laptop stand for saving money",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      35,
+      142,
+      426,
+      791
+    ]
+  },
+  {
+    "id": 210,
+    "query": "wireless smart thermostat",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      98,
+      102,
+      366,
+      503,
+      786
+    ]
+  },
+  {
+    "id": 211,
+    "query": "ST-NOVVI-0725",
+    "queryType": "exact",
+    "relevantProductIds": [
+      56
+    ]
+  },
+  {
+    "id": 212,
+    "query": "best racing wheel for saving money",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      500,
+      719,
+      802,
+      862
+    ]
+  },
+  {
+    "id": 213,
+    "query": "fast-charging car charger",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      57,
+      554,
+      749
+    ]
+  },
+  {
+    "id": 214,
+    "query": "lightweight luxury smartwatch",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      120,
+      150,
+      419
+    ]
+  },
+  {
+    "id": 215,
+    "query": "I need an audio accessory for professional work",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      62,
+      182,
+      193,
+      203,
+      206,
+      314,
+      407,
+      467,
+      481,
+      520
+    ]
+  },
+  {
+    "id": 216,
+    "query": "best footrest for daily use without replacing batteries",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      5,
+      91,
+      345,
+      506,
+      702
+    ]
+  },
+  {
+    "id": 217,
+    "query": "best rugged portable SSD for small desks",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      234,
+      571,
+      583,
+      608,
+      686,
+      874
+    ]
+  },
+  {
+    "id": 218,
+    "query": "best compact 75% keyboard for cable-free use",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      354,
+      514,
+      555,
+      852
+    ]
+  },
+  {
+    "id": 219,
+    "query": "best luxury smartwatch for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      123,
+      419,
+      788
+    ]
+  },
+  {
+    "id": 220,
+    "query": "best Lightning cable for saving money",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      127,
+      153,
+      214,
+      298
+    ]
+  },
+  {
+    "id": 221,
+    "query": "best desk organizer for long working hours",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      114,
+      134
+    ]
+  },
+  {
+    "id": 222,
+    "query": "usb-c Thunderbolt cable",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      32,
+      40,
+      341
+    ]
+  },
+  {
+    "id": 223,
+    "query": "I need a gaming accessory that connects over Bluetooth",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      28,
+      72,
+      246,
+      249,
+      267,
+      357,
+      405,
+      458,
+      507,
+      697
+    ]
+  },
+  {
+    "id": 224,
+    "query": "best e-reader tablet for long working hours",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      137,
+      210,
+      284,
+      628
+    ]
+  },
+  {
+    "id": 225,
+    "query": "compact creator laptop",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      136,
+      324,
+      381,
+      557,
+      899
+    ]
+  },
+  {
+    "id": 226,
+    "query": "bluetooth arcade fight stick",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      246,
+      267,
+      357,
+      405,
+      458,
+      697,
+      978
+    ]
+  },
+  {
+    "id": 227,
+    "query": "I need a monitor easy to carry around",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      59,
+      65,
+      75,
+      190,
+      308,
+      317,
+      442,
+      496,
+      532,
+      566
+    ]
+  },
+  {
+    "id": 228,
+    "query": "I need a cable that charges over USB-C",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      10,
+      32,
+      40,
+      140,
+      157,
+      309,
+      341,
+      409,
+      413,
+      470
+    ]
+  },
+  {
+    "id": 229,
+    "query": "best kids tablet for carrying all day",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      156,
+      168,
+      271,
+      707,
+      898
+    ]
+  },
+  {
+    "id": 230,
+    "query": "best kids smartwatch for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      109,
+      287,
+      424,
+      471
+    ]
+  },
+  {
+    "id": 231,
+    "query": "best 5G smartphone for quick top-ups",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      51,
+      88,
+      176,
+      393,
+      982
+    ]
+  },
+  {
+    "id": 232,
+    "query": "best console charging dock for daily use without replacing batteries",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      72,
+      188,
+      538,
+      671
+    ]
+  },
+  {
+    "id": 233,
+    "query": "I need a speaker that is cheap and good value",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      295,
+      348,
+      389,
+      518,
+      522,
+      627,
+      636,
+      770,
+      785,
+      812
+    ]
+  },
+  {
+    "id": 234,
+    "query": "rgb trackball mouse",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      180,
+      235,
+      537
+    ]
+  },
+  {
+    "id": 235,
+    "query": "bluetooth vlogging camera",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      47,
+      448,
+      904,
+      956
+    ]
+  },
+  {
+    "id": 236,
+    "query": "best wireless keyboard for small desks",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      173,
+      684
+    ]
+  },
+  {
+    "id": 237,
+    "query": "CB-RIFLI-0632",
+    "queryType": "exact",
+    "relevantProductIds": [
+      214
+    ]
+  },
+  {
+    "id": 238,
+    "query": "CB-VERED-0626",
+    "queryType": "exact",
+    "relevantProductIds": [
+      129
+    ]
+  },
+  {
+    "id": 239,
+    "query": "budget desk lamp",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      64,
+      573,
+      966
+    ]
+  },
+  {
+    "id": 240,
+    "query": "best camera-focused smartphone for daily use without replacing batteries",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      108,
+      299,
+      567,
+      694,
+      969,
+      975
+    ]
+  },
+  {
+    "id": 241,
+    "query": "I need a networking device with a high-end feel",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      61,
+      71,
+      149,
+      170,
+      227,
+      302,
+      488,
+      495,
+      545,
+      552
+    ]
+  },
+  {
+    "id": 242,
+    "query": "rgb gaming chair",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      106,
+      270,
+      499,
+      992
+    ]
+  },
+  {
+    "id": 243,
+    "query": "I need a camera that takes up very little space",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      49,
+      202,
+      208,
+      322,
+      402,
+      485,
+      509,
+      510,
+      539,
+      582
+    ]
+  },
+  {
+    "id": 244,
+    "query": "Rift Flex Portable Speaker",
+    "queryType": "exact",
+    "relevantProductIds": [
+      386
+    ]
+  },
+  {
+    "id": 245,
+    "query": "Quasar Plus S",
+    "queryType": "exact",
+    "relevantProductIds": [
+      550
+    ]
+  },
+  {
+    "id": 246,
+    "query": "I need a camera for professional work",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      39,
+      202,
+      233,
+      343,
+      379,
+      402,
+      450,
+      582,
+      656,
+      698
+    ]
+  },
+  {
+    "id": 247,
+    "query": "compact portable SSD",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      228,
+      291
+    ]
+  },
+  {
+    "id": 248,
+    "query": "best curved monitor for travel",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      59,
+      496,
+      566
+    ]
+  },
+  {
+    "id": 249,
+    "query": "best business laptop for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      146,
+      197,
+      850,
+      980
+    ]
+  },
+  {
+    "id": 250,
+    "query": "rechargeable power bank",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      250,
+      365,
+      430,
+      590
+    ]
+  },
+  {
+    "id": 251,
+    "query": "wireless foldable smartphone",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      159,
+      237,
+      523,
+      530,
+      750,
+      799
+    ]
+  },
+  {
+    "id": 252,
+    "query": "AA-KESAI-0989",
+    "queryType": "exact",
+    "relevantProductIds": [
+      113
+    ]
+  },
+  {
+    "id": 253,
+    "query": "budget USB-C cable",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      10,
+      602,
+      932
+    ]
+  },
+  {
+    "id": 254,
+    "query": "best GPS smartwatch for outdoor use",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      274,
+      680,
+      855
+    ]
+  },
+  {
+    "id": 255,
+    "query": "bluetooth DSLR camera",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      450,
+      701
+    ]
+  },
+  {
+    "id": 256,
+    "query": "usb-c portable monitor",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      75,
+      317,
+      442,
+      995
+    ]
+  },
+  {
+    "id": 257,
+    "query": "bluetooth wireless mouse",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      712,
+      737,
+      872
+    ]
+  },
+  {
+    "id": 258,
+    "query": "rechargeable on-ear headphones",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      6,
+      34,
+      293,
+      445
+    ]
+  },
+  {
+    "id": 259,
+    "query": "best Bluetooth speaker for USB-C devices",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      252,
+      295,
+      632,
+      753,
+      780,
+      894
+    ]
+  },
+  {
+    "id": 260,
+    "query": "best conference speakerphone for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      212,
+      490,
+      681,
+      891
+    ]
+  },
+  {
+    "id": 261,
+    "query": "best studio monitor headphones for noisy commutes",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      74,
+      757,
+      758,
+      797
+    ]
+  },
+  {
+    "id": 262,
+    "query": "I need a smartwatch that can survive getting wet",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      130,
+      150,
+      195,
+      232,
+      274,
+      287,
+      289,
+      447,
+      454,
+      635
+    ]
+  },
+  {
+    "id": 263,
+    "query": "rechargeable gaming mouse",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      141,
+      815
+    ]
+  },
+  {
+    "id": 264,
+    "query": "I need a keyboard that charges over USB-C",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      66,
+      173,
+      179,
+      205,
+      259,
+      281,
+      354,
+      391,
+      534,
+      794
+    ]
+  },
+  {
+    "id": 265,
+    "query": "budget smart door lock",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      524,
+      873,
+      958
+    ]
+  },
+  {
+    "id": 266,
+    "query": "Kinetic Edge Pro",
+    "queryType": "exact",
+    "relevantProductIds": [
+      105
+    ]
+  },
+  {
+    "id": 267,
+    "query": "compact laptop stand",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      426,
+      440,
+      459,
+      607,
+      791,
+      933
+    ]
+  },
+  {
+    "id": 268,
+    "query": "best Wi-Fi 6 router for a smart home setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      93,
+      562,
+      695
+    ]
+  },
+  {
+    "id": 269,
+    "query": "best foldable smartphone for carrying all day",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      396,
+      605,
+      699,
+      752
+    ]
+  },
+  {
+    "id": 270,
+    "query": "I need a speaker without any cables",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      1,
+      23,
+      81,
+      161,
+      196,
+      252,
+      295,
+      348,
+      468,
+      478
+    ]
+  },
+  {
+    "id": 271,
+    "query": "best smart bulb for saving money",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      163,
+      621,
+      666,
+      907
+    ]
+  },
+  {
+    "id": 272,
+    "query": "TB-RIFPL-0483",
+    "queryType": "exact",
+    "relevantProductIds": [
+      327
+    ]
+  },
+  {
+    "id": 273,
+    "query": "usb-c NVMe internal SSD",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      264,
+      484,
+      923
+    ]
+  },
+  {
+    "id": 274,
+    "query": "best fitness band for travel",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      635,
+      708,
+      763,
+      856
+    ]
+  },
+  {
+    "id": 275,
+    "query": "premium replacement ear tips",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      67,
+      182,
+      467,
+      481,
+      589
+    ]
+  },
+  {
+    "id": 276,
+    "query": "best DisplayPort cable for USB-C devices",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      140,
+      892
+    ]
+  },
+  {
+    "id": 277,
+    "query": "I need a mouse that takes up very little space",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      22,
+      69,
+      116,
+      211,
+      221,
+      235,
+      275,
+      329,
+      361,
+      388
+    ]
+  },
+  {
+    "id": 278,
+    "query": "bluetooth kids smartwatch",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      76,
+      109,
+      424,
+      471
+    ]
+  },
+  {
+    "id": 279,
+    "query": "I need a smartwatch easy to carry around",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      48,
+      53,
+      111,
+      123,
+      130,
+      287,
+      289,
+      390,
+      471,
+      635
+    ]
+  },
+  {
+    "id": 280,
+    "query": "lightweight 11-inch tablet",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      326,
+      368,
+      464,
+      547
+    ]
+  },
+  {
+    "id": 281,
+    "query": "SK-IONCO-0431",
+    "queryType": "exact",
+    "relevantProductIds": [
+      580
+    ]
+  },
+  {
+    "id": 282,
+    "query": "I need a storage drive that is cheap and good value",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      147,
+      198,
+      260,
+      286,
+      291,
+      377,
+      564,
+      571,
+      583,
+      657
+    ]
+  },
+  {
+    "id": 283,
+    "query": "best trackball mouse for daily use without replacing batteries",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      180,
+      361,
+      682
+    ]
+  },
+  {
+    "id": 284,
+    "query": "I need a smartphone without any cables",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      108,
+      133,
+      159,
+      176,
+      237,
+      299,
+      523,
+      530,
+      567,
+      648
+    ]
+  },
+  {
+    "id": 285,
+    "query": "I need an office product that charges over USB-C",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      35,
+      91,
+      134,
+      164,
+      306,
+      316,
+      506,
+      606,
+      607,
+      631
+    ]
+  },
+  {
+    "id": 286,
+    "query": "best sport earphones for gaming",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      68,
+      455,
+      585,
+      598,
+      977
+    ]
+  },
+  {
+    "id": 287,
+    "query": "rechargeable true wireless earbuds",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      27,
+      346,
+      427,
+      497
+    ]
+  },
+  {
+    "id": 288,
+    "query": "best gaming mouse for USB-C devices",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      617,
+      645
+    ]
+  },
+  {
+    "id": 289,
+    "query": "I need a speaker that takes up very little space",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      81,
+      84,
+      161,
+      196,
+      460,
+      480,
+      491,
+      551,
+      569,
+      632
+    ]
+  },
+  {
+    "id": 290,
+    "query": "I need a mouse for professional work",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      207,
+      231,
+      417,
+      533,
+      578
+    ]
+  },
+  {
+    "id": 291,
+    "query": "best 27-inch monitor for a colorful setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      457,
+      706,
+      887,
+      910
+    ]
+  },
+  {
+    "id": 292,
+    "query": "best PoE switch for professional work",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      505,
+      577,
+      913,
+      960
+    ]
+  },
+  {
+    "id": 293,
+    "query": "Pulsar Air S",
+    "queryType": "exact",
+    "relevantProductIds": [
+      259
+    ]
+  },
+  {
+    "id": 294,
+    "query": "compact ultralight mouse",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      221,
+      388,
+      528,
+      690,
+      842,
+      864,
+      930
+    ]
+  },
+  {
+    "id": 295,
+    "query": "Pulsar Lite Ultrawide Monitor",
+    "queryType": "exact",
+    "relevantProductIds": [
+      213
+    ]
+  },
+  {
+    "id": 296,
+    "query": "best wireless mouse for a colorful setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      712,
+      830,
+      872
+    ]
+  },
+  {
+    "id": 297,
+    "query": "SW-HELMA-0543",
+    "queryType": "exact",
+    "relevantProductIds": [
+      708
+    ]
+  },
+  {
+    "id": 298,
+    "query": "best ergonomic vertical mouse for gaming",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      11,
+      22,
+      199,
+      363,
+      422
+    ]
+  },
+  {
+    "id": 299,
+    "query": "best office monitor for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      190,
+      256,
+      521,
+      532
+    ]
+  },
+  {
+    "id": 300,
+    "query": "best 4K design monitor for professional work",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      226,
+      282,
+      362,
+      517
+    ]
+  },
+  {
+    "id": 301,
+    "query": "I need a gaming accessory good for playing games",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      25,
+      28,
+      60,
+      106,
+      188,
+      201,
+      238,
+      240,
+      247,
+      270
+    ]
+  },
+  {
+    "id": 302,
+    "query": "HP-QUAFL-0028",
+    "queryType": "exact",
+    "relevantProductIds": [
+      758
+    ]
+  },
+  {
+    "id": 303,
+    "query": "best monitor arm for professional work",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      285,
+      297,
+      826,
+      968
+    ]
+  },
+  {
+    "id": 304,
+    "query": "professional gaming headset",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      337,
+      990
+    ]
+  },
+  {
+    "id": 305,
+    "query": "bluetooth mirrorless camera",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      41,
+      343,
+      485,
+      586,
+      822
+    ]
+  },
+  {
+    "id": 306,
+    "query": "portable external hard drive",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      20,
+      421,
+      494,
+      829
+    ]
+  },
+  {
+    "id": 307,
+    "query": "smart video doorbell",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      7,
+      77,
+      453,
+      744
+    ]
+  },
+  {
+    "id": 308,
+    "query": "best ultrawide monitor for USB-C devices",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      82,
+      328,
+      340
+    ]
+  },
+  {
+    "id": 309,
+    "query": "budget audio splitter cable",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      222,
+      784,
+      986
+    ]
+  },
+  {
+    "id": 310,
+    "query": "GM-ZENVI-0788",
+    "queryType": "exact",
+    "relevantProductIds": [
+      671
+    ]
+  },
+  {
+    "id": 311,
+    "query": "portable game controller",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      50,
+      240,
+      378,
+      639,
+      787
+    ]
+  },
+  {
+    "id": 312,
+    "query": "best membrane keyboard for small desks",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      117,
+      367,
+      391,
+      972
+    ]
+  },
+  {
+    "id": 313,
+    "query": "Quanta Edge",
+    "queryType": "exact",
+    "relevantProductIds": [
+      629
+    ]
+  },
+  {
+    "id": 314,
+    "query": "SW-RIFEL-0508",
+    "queryType": "exact",
+    "relevantProductIds": [
+      411
+    ]
+  },
+  {
+    "id": 315,
+    "query": "Jetstream Max SE",
+    "queryType": "exact",
+    "relevantProductIds": [
+      155
+    ]
+  },
+  {
+    "id": 316,
+    "query": "usb-c in-ear earbuds",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      155,
+      200,
+      733,
+      831,
+      869,
+      963
+    ]
+  },
+  {
+    "id": 317,
+    "query": "I need a networking device without any cables",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      71,
+      170,
+      172,
+      302,
+      498,
+      504,
+      556,
+      650,
+      764,
+      778
+    ]
+  },
+  {
+    "id": 318,
+    "query": "Vertex Plus",
+    "queryType": "exact",
+    "relevantProductIds": [
+      73
+    ]
+  },
+  {
+    "id": 319,
+    "query": "waterproof soundbar",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      103,
+      460
+    ]
+  },
+  {
+    "id": 320,
+    "query": "portable microSD card",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      305,
+      347,
+      444,
+      492,
+      563
+    ]
+  },
+  {
+    "id": 321,
+    "query": "bluetooth shower speaker",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      1,
+      192,
+      662
+    ]
+  },
+  {
+    "id": 322,
+    "query": "wireless Bluetooth audio adapter",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      113,
+      251,
+      265,
+      819
+    ]
+  },
+  {
+    "id": 323,
+    "query": "LT-BLULI-0076",
+    "queryType": "exact",
+    "relevantProductIds": [
+      693
+    ]
+  },
+  {
+    "id": 324,
+    "query": "Onyx Go II",
+    "queryType": "exact",
+    "relevantProductIds": [
+      972
+    ]
+  },
+  {
+    "id": 325,
+    "query": "budget e-reader tablet",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      73,
+      186,
+      253,
+      284,
+      425,
+      742
+    ]
+  },
+  {
+    "id": 326,
+    "query": "best compact camera for outdoor use",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      79,
+      339,
+      633,
+      823
+    ]
+  },
+  {
+    "id": 327,
+    "query": "Nimbus One SE Ergonomic Split Keyboard",
+    "queryType": "exact",
+    "relevantProductIds": [
+      979
+    ]
+  },
+  {
+    "id": 328,
+    "query": "smart PoE switch",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      488,
+      504,
+      505,
+      870
+    ]
+  },
+  {
+    "id": 329,
+    "query": "budget desk organizer",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      114,
+      306,
+      834
+    ]
+  },
+  {
+    "id": 330,
+    "query": "usb-c rugged portable SSD",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      56,
+      234,
+      571,
+      583,
+      608,
+      686
+    ]
+  },
+  {
+    "id": 331,
+    "query": "I need a storage drive for professional work",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      3,
+      24,
+      234,
+      260,
+      264,
+      286,
+      291,
+      376,
+      563,
+      604
+    ]
+  },
+  {
+    "id": 332,
+    "query": "SK-KINGO-0436",
+    "queryType": "exact",
+    "relevantProductIds": [
+      468
+    ]
+  },
+  {
+    "id": 333,
+    "query": "waterproof outdoor smartwatch",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      195,
+      232,
+      447,
+      748,
+      927,
+      950
+    ]
+  },
+  {
+    "id": 334,
+    "query": "best Bluetooth audio adapter for USB-C devices",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      113,
+      251,
+      819
+    ]
+  },
+  {
+    "id": 335,
+    "query": "best power bank for carrying all day",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      365,
+      590,
+      716,
+      793
+    ]
+  },
+  {
+    "id": 336,
+    "query": "KB-IONPL-0235",
+    "queryType": "exact",
+    "relevantProductIds": [
+      880
+    ]
+  },
+  {
+    "id": 337,
+    "query": "compact business laptop",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      146,
+      197,
+      374,
+      693,
+      808,
+      850
+    ]
+  },
+  {
+    "id": 338,
+    "query": "CB-RIFGO-0662",
+    "queryType": "exact",
+    "relevantProductIds": [
+      452
+    ]
+  },
+  {
+    "id": 339,
+    "query": "bluetooth microphone boom arm",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      760,
+      944,
+      976,
+      988
+    ]
+  },
+  {
+    "id": 340,
+    "query": "ST-GLAGO-0706",
+    "queryType": "exact",
+    "relevantProductIds": [
+      494
+    ]
+  },
+  {
+    "id": 341,
+    "query": "portable smart speaker",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      81,
+      189,
+      518,
+      653,
+      863,
+      914,
+      973
+    ]
+  },
+  {
+    "id": 342,
+    "query": "fast-charging pro tablet",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      8,
+      493,
+      540,
+      584
+    ]
+  },
+  {
+    "id": 343,
+    "query": "usb-c racing wheel",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      154,
+      500,
+      711,
+      802,
+      881
+    ]
+  },
+  {
+    "id": 344,
+    "query": "smart fitness band",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      290,
+      489,
+      635,
+      708,
+      763,
+      856,
+      859
+    ]
+  },
+  {
+    "id": 345,
+    "query": "best portable speaker for pairing with my phone",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      478,
+      542,
+      627,
+      668,
+      941
+    ]
+  },
+  {
+    "id": 346,
+    "query": "I need a networking device that takes up very little space",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      71,
+      498,
+      505,
+      556,
+      562,
+      766,
+      886,
+      888,
+      912
+    ]
+  },
+  {
+    "id": 347,
+    "query": "OF-NEBCO-0930",
+    "queryType": "exact",
+    "relevantProductIds": [
+      573
+    ]
+  },
+  {
+    "id": 348,
+    "query": "I need an office product that is cheap and good value",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      35,
+      44,
+      64,
+      86,
+      91,
+      114,
+      121,
+      142,
+      164,
+      297
+    ]
+  },
+  {
+    "id": 349,
+    "query": "budget USB flash drive",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      147,
+      286,
+      790,
+      924
+    ]
+  },
+  {
+    "id": 350,
+    "query": "best replacement ear tips for professional work",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      182,
+      203,
+      206,
+      467,
+      481
+    ]
+  },
+  {
+    "id": 351,
+    "query": "I need a keyboard without any cables",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      97,
+      99,
+      173,
+      205,
+      209,
+      320,
+      354,
+      356,
+      369,
+      382
+    ]
+  },
+  {
+    "id": 352,
+    "query": "I need a camera without any cables",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      41,
+      49,
+      79,
+      171,
+      174,
+      191,
+      208,
+      233,
+      263,
+      339
+    ]
+  },
+  {
+    "id": 353,
+    "query": "premium kids tablet",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      168,
+      242,
+      271,
+      312,
+      707,
+      898
+    ]
+  },
+  {
+    "id": 354,
+    "query": "professional Wi-Fi extender",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      61,
+      78,
+      149,
+      373
+    ]
+  },
+  {
+    "id": 355,
+    "query": "best gaming monitor for a colorful setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      268,
+      279,
+      638,
+      689
+    ]
+  },
+  {
+    "id": 356,
+    "query": "best gigabit switch for professional work",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      172,
+      227,
+      764,
+      922
+    ]
+  },
+  {
+    "id": 357,
+    "query": "I need a laptop that takes up very little space",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      15,
+      136,
+      146,
+      162,
+      197,
+      324,
+      350,
+      374,
+      381,
+      406
+    ]
+  },
+  {
+    "id": 358,
+    "query": "best outdoor smartwatch for quick top-ups",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      195,
+      748,
+      927,
+      950
+    ]
+  },
+  {
+    "id": 359,
+    "query": "KB-IONPR-0227",
+    "queryType": "exact",
+    "relevantProductIds": [
+      404
+    ]
+  },
+  {
+    "id": 360,
+    "query": "wireless security camera",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      174,
+      191,
+      208,
+      642,
+      656
+    ]
+  },
+  {
+    "id": 361,
+    "query": "I need an audio accessory that is very light",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      9,
+      80,
+      115,
+      203,
+      230,
+      255,
+      265,
+      311,
+      407,
+      467
+    ]
+  },
+  {
+    "id": 362,
+    "query": "fast-charging HDMI 2.1 cable",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      21,
+      157,
+      248,
+      559
+    ]
+  },
+  {
+    "id": 363,
+    "query": "CB-FATPR-0669",
+    "queryType": "exact",
+    "relevantProductIds": [
+      349
+    ]
+  },
+  {
+    "id": 364,
+    "query": "best 2-in-1 convertible laptop for saving money",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      162,
+      482,
+      646
+    ]
+  },
+  {
+    "id": 365,
+    "query": "I need a mouse without any cables",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      363,
+      465,
+      712,
+      715,
+      722,
+      737,
+      783,
+      815,
+      830,
+      861
+    ]
+  },
+  {
+    "id": 366,
+    "query": "CM-HALUL-0211",
+    "queryType": "exact",
+    "relevantProductIds": [
+      402
+    ]
+  },
+  {
+    "id": 367,
+    "query": "best ultralight mouse for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      221,
+      449,
+      842,
+      864
+    ]
+  },
+  {
+    "id": 368,
+    "query": "best gaming router for professional work",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      166,
+      623,
+      704
+    ]
+  },
+  {
+    "id": 369,
+    "query": "I need a camera with a built-in battery I can recharge",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      41,
+      174,
+      202,
+      233,
+      322,
+      339,
+      343,
+      397,
+      402,
+      476
+    ]
+  },
+  {
+    "id": 370,
+    "query": "best soundbar for USB-C devices",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      103,
+      734
+    ]
+  },
+  {
+    "id": 371,
+    "query": "best true wireless earbuds for pairing with my phone",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      27,
+      683,
+      993
+    ]
+  },
+  {
+    "id": 372,
+    "query": "I need a laptop with a high-end feel",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      15,
+      101,
+      105,
+      136,
+      146,
+      197,
+      217,
+      439,
+      474,
+      643
+    ]
+  },
+  {
+    "id": 373,
+    "query": "ergonomic curved monitor",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      59,
+      380,
+      383,
+      948
+    ]
+  },
+  {
+    "id": 374,
+    "query": "SW-LATUL-0525",
+    "queryType": "exact",
+    "relevantProductIds": [
+      408
+    ]
+  },
+  {
+    "id": 375,
+    "query": "Kinetic Edge S",
+    "queryType": "exact",
+    "relevantProductIds": [
+      896
+    ]
+  },
+  {
+    "id": 376,
+    "query": "best GaN wall charger for travel",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      52,
+      55,
+      626,
+      765,
+      955
+    ]
+  },
+  {
+    "id": 377,
+    "query": "best portable SSD for saving money",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      291,
+      833
+    ]
+  },
+  {
+    "id": 378,
+    "query": "compact ergonomic split keyboard",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      99,
+      412,
+      692,
+      848,
+      979
+    ]
+  },
+  {
+    "id": 379,
+    "query": "best travel mouse for small desks",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      69,
+      116,
+      465,
+      501,
+      578,
+      587,
+      771,
+      919
+    ]
+  },
+  {
+    "id": 380,
+    "query": "best instant camera for cable-free use",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      49,
+      171,
+      263,
+      871
+    ]
+  },
+  {
+    "id": 381,
+    "query": "best USB-C cable for carrying all day",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      403,
+      603
+    ]
+  },
+  {
+    "id": 382,
+    "query": "best carry case for saving money",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      241,
+      325,
+      546,
+      615
+    ]
+  },
+  {
+    "id": 383,
+    "query": "best audio splitter cable for USB-C devices",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      222,
+      853
+    ]
+  },
+  {
+    "id": 384,
+    "query": "rechargeable webcam",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      258,
+      319,
+      674
+    ]
+  },
+  {
+    "id": 385,
+    "query": "best headphone cable for USB-C devices",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      255,
+      311,
+      568
+    ]
+  },
+  {
+    "id": 386,
+    "query": "best mechanical keyboard for a premium setup",
+    "queryType": "hybrid",
+    "relevantProductIds": [
+      31,
+      601,
+      746,
+      939
+    ]
+  },
+  {
+    "id": 387,
+    "query": "usb-c wireless keyboard",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      173,
+      794,
+      900
+    ]
+  },
+  {
+    "id": 388,
+    "query": "lightweight DAC/amp dongle",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      9,
+      80,
+      230,
+      813
+    ]
+  },
+  {
+    "id": 389,
+    "query": "wireless gigabit switch",
+    "queryType": "lexical",
+    "relevantProductIds": [
+      172,
+      556,
+      764,
+      805,
+      922
+    ]
+  },
+  {
+    "id": 390,
+    "query": "I need a storage drive with a high-end feel",
+    "queryType": "semantic",
+    "relevantProductIds": [
+      56,
+      278,
+      305,
+      387,
+      421,
+      484,
+      494,
+      595,
+      673,
+      731
+    ]
+  }
+]
