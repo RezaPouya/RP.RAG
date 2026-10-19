@@ -13,6 +13,7 @@ public sealed class AskService(
     IProductCatalogService catalog,
     IAnswerGeneratorResolver generatorResolver,
     IPromptGuardrail promptGuardrail,
+    IChunkRelevanceEvaluator chunkRelevanceEvaluator,
     PromptBuilder prompts,
     IOptions<AskOptions> options,
     ILogger<AskService> logger) : IAskService
@@ -72,7 +73,21 @@ public sealed class AskService(
         }
 
         var productIds = products.Select(p => p.ProductId).ToHashSet();
-        var chunks = retrieval.Chunks.Where(c => productIds.Contains(c.ProductId)).ToList();
+        var retrievedChunks = retrieval.Chunks.Where(c => productIds.Contains(c.ProductId)).ToList();
+        var relevanceResults = await chunkRelevanceEvaluator.EvaluateAsync(question, retrievedChunks, ct);
+        var relevanceByChunk = relevanceResults.ToDictionary(result => result.ChunkId);
+        var chunks = retrievedChunks
+            .Where(chunk => relevanceByChunk.TryGetValue(chunk.ChunkId, out var result) &&
+                result.Relevance != ChunkRelevance.Irrelevant &&
+                !result.ContainsPromptInjection)
+            .ToList();
+
+        logger.LogInformation(
+            "Stage 2 retained {KeptChunks} of {RetrievedChunks} retrieved chunks for question '{Question}'",
+            chunks.Count,
+            retrievedChunks.Count,
+            question);
+
         var userPrompt = prompts.BuildUserPrompt(question, products, chunks);
 
         IAnswerGenerator generator = generatorResolver.Resolve();

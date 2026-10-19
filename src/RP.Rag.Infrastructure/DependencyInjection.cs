@@ -65,6 +65,7 @@ public static class DependencyInjection
             .Validate(o => o.RequestTimeoutSeconds > 0, "Laya:RequestTimeoutSeconds must be positive.")
             .Validate(o => o.JailbreakThreshold is >= 0 and <= 1, "Laya:JailbreakThreshold must be between 0 and 1.")
             .Validate(o => o.PromptInjectionThreshold is >= 0 and <= 1, "Laya:PromptInjectionThreshold must be between 0 and 1.")
+            .Validate(o => o.ChunkPromptInjectionThreshold is >= 0 and <= 1, "Laya:ChunkPromptInjectionThreshold must be between 0 and 1.")
             .ValidateOnStart();
 
         services.AddHttpClient(ServiceKeys.Laya, (sp, http) =>
@@ -79,6 +80,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IPromptGuardrail, LayaPromptGuardrail>();
+        services.AddScoped<IChunkRelevanceEvaluator, LayaChunkRelevanceEvaluator>();
 
         services.AddSingleton<CategoryTokenIndexCache>();
         services.AddScoped<CategoryTokenIndexBuilder>();
