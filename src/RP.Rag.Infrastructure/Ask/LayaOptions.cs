@@ -11,6 +11,6 @@ public sealed class LayaOptions
     public double PromptInjectionThreshold { get; set; } = 0.5;
     public double PolicyViolationThreshold { get; set; } = 0.5;
     public double ChunkPromptInjectionThreshold { get; set; } = 0.5;
-    public double FinalJailbreakThreshold { get; set; } = 0.5;
+    public double FinalJailbreakThreshold { get; set; } = 0.8;
     public double FinalPromptInjectionThreshold { get; set; } = 0.5;
 }

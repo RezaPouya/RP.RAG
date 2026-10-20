@@ -141,6 +141,8 @@ public sealed class AskServiceGuardrailTests
 
         Assert.True(result.IsAllowed);
         Assert.NotNull(sentBody);
+        Assert.Contains("\"untrusted_prompt\"", sentBody);
+        Assert.DoesNotContain("\"system_prompt\"", sentBody);
         Assert.Contains("Do not flag ordinary product questions", sentBody);
         Assert.Contains("Do not flag ordinary requests for product help", sentBody);
     }
