@@ -44,6 +44,6 @@ Answer product questions and general questions only when the general explanation
 
 ## 7. Enforcement limitations
 
-- Laya decisions are probabilistic signals, not security guarantees. Apply the configured checks and thresholds, but do not claim that they detect every attack or enforce every content rule.
-- The current Laya integration checks for jailbreak and prompt-injection signals. The content boundaries in this file guide answer generation; they are not all enforced as deterministic HTTP blocks.
+- Laya decisions are probabilistic signals, not security guarantees. The application applies configured thresholds to jailbreak, prompt-injection, product-scope, restricted-content, and external-source decisions, but these checks can still produce false positives or false negatives.
+- Content boundaries in this file guide answer generation. The Laya checks are a defense layer, not proof that every prohibited request or unsafe response will be detected.
 - Authentication, authorization, schema validation, business rules, and consequential-action controls must be enforced by application code at the relevant boundary, not delegated to the model.

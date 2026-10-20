@@ -17,4 +17,7 @@ public sealed record PromptGuardrailResult(
     bool IsAllowed,
     double JailbreakProbability,
     double PromptInjectionProbability,
-    string? BlockReason = null);
+    string? BlockReason = null,
+    double OutOfScopeProbability = 0,
+    double RestrictedContentProbability = 0,
+    double ExternalSourceProbability = 0);

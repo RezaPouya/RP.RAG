@@ -79,15 +79,22 @@ public sealed class AskService(
         var relevanceByChunk = relevanceResults.ToDictionary(result => result.ChunkId);
         var chunks = retrievedChunks
             .Where(chunk => relevanceByChunk.TryGetValue(chunk.ChunkId, out var result) &&
-                result.Relevance != ChunkRelevance.Irrelevant &&
+                (result.Relevance == ChunkRelevance.Relevant ||
+                    (opts.IncludePartiallyRelevantChunks && result.Relevance == ChunkRelevance.PartiallyRelevant)) &&
                 !result.ContainsPromptInjection)
             .ToList();
 
+        var partiallyRelevantCount = relevanceResults.Count(result => result.Relevance == ChunkRelevance.PartiallyRelevant);
+        var irrelevantCount = relevanceResults.Count(result => result.Relevance == ChunkRelevance.Irrelevant);
+        var injectionFlaggedCount = relevanceResults.Count(result => result.ContainsPromptInjection);
+
         logger.LogInformation(
-            "Stage 2 retained {KeptChunks} of {RetrievedChunks} retrieved chunks for question '{Question}'",
+            "Stage 2 retained {KeptChunks} of {RetrievedChunks} chunks; partial={PartialChunks}, irrelevant={IrrelevantChunks}, injection={InjectionChunks}",
             chunks.Count,
             retrievedChunks.Count,
-            question);
+            partiallyRelevantCount,
+            irrelevantCount,
+            injectionFlaggedCount);
 
         var userPrompt = prompts.BuildUserPrompt(question, products, chunks);
 
