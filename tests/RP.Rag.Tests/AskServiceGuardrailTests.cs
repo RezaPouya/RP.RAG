@@ -117,6 +117,34 @@ public sealed class AskServiceGuardrailTests
         factory.Verify(x => x.CreateClient(ServiceKeys.Laya), Times.Once);
     }
 
+    [Fact]
+    public async Task LayaFinalGuardrail_DoesNotTreatProductSetupStepsAsInjection()
+    {
+        const string responseBody = """
+            {
+              "answers": {
+                "final_jailbreak": { "noul": 0.01 },
+                "final_prompt_injection": { "noul": 0.02 }
+              }
+            }
+            """;
+        string? sentBody = null;
+        var factory = CreateHttpClientFactory(responseBody, request =>
+            sentBody = request.Content!.ReadAsStringAsync().GetAwaiter().GetResult());
+        var guardrail = new LayaFinalPromptGuardrail(
+            factory.Object,
+            Options.Create(new LayaOptions()));
+
+        var result = await guardrail.EvaluateAsync(
+            "You are a product catalog assistant.",
+            "Question: How do I pair the Kestrel Neo SE keyboard?\nProduct guide: Hold the pairing key for three seconds.");
+
+        Assert.True(result.IsAllowed);
+        Assert.NotNull(sentBody);
+        Assert.Contains("Do not flag ordinary product questions", sentBody);
+        Assert.Contains("Do not flag ordinary requests for product help", sentBody);
+    }
+
     private static Fixture CreateFixture(AskOptions? options = null)
     {
         var relevant = new ChunkHit(1, 1, "description", "Battery", "directly useful evidence", 0.9);
@@ -181,11 +209,17 @@ public sealed class AskServiceGuardrailTests
         return new Fixture(service, hybrid, inputGuardrail, finalGuardrail, generatorResolver, generator);
     }
 
-    private static Mock<IHttpClientFactory> CreateHttpClientFactory(string responseBody)
+    private static Mock<IHttpClientFactory> CreateHttpClientFactory(
+        string responseBody,
+        Action<HttpRequestMessage>? inspectRequest = null)
     {
-        var handler = new StubHttpMessageHandler(_ => new HttpResponseMessage(HttpStatusCode.OK)
+        var handler = new StubHttpMessageHandler(request =>
         {
-            Content = new StringContent(responseBody, Encoding.UTF8, "application/json")
+            inspectRequest?.Invoke(request);
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(responseBody, Encoding.UTF8, "application/json")
+            };
         });
         var client = new HttpClient(handler) { BaseAddress = new Uri("http://localhost:8090/") };
         var factory = new Mock<IHttpClientFactory>();
