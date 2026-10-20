@@ -14,6 +14,7 @@ public sealed class AskService(
     IAnswerGeneratorResolver generatorResolver,
     IPromptGuardrail promptGuardrail,
     IChunkRelevanceEvaluator chunkRelevanceEvaluator,
+    IFinalPromptGuardrail finalPromptGuardrail,
     PromptBuilder prompts,
     IOptions<AskOptions> options,
     ILogger<AskService> logger) : IAskService
@@ -89,6 +90,24 @@ public sealed class AskService(
             question);
 
         var userPrompt = prompts.BuildUserPrompt(question, products, chunks);
+
+        var finalAssessment = await finalPromptGuardrail.EvaluateAsync(prompts.SystemPrompt, userPrompt, ct);
+        if (!finalAssessment.IsAllowed)
+        {
+            logger.LogWarning(
+                "Blocked assembled request. Jailbreak={JailbreakProbability}, PromptInjection={PromptInjectionProbability}",
+                finalAssessment.JailbreakProbability,
+                finalAssessment.PromptInjectionProbability);
+
+            return new AskResponse
+            {
+                Question = question,
+                Answer = "I can't safely use the assembled request to answer this question.",
+                IsBlocked = true,
+                BlockReason = finalAssessment.BlockReason,
+                TookMs = sw.ElapsedMilliseconds
+            };
+        }
 
         IAnswerGenerator generator = generatorResolver.Resolve();
 
