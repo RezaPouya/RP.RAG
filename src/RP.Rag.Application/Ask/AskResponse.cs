@@ -8,6 +8,8 @@ public sealed class AskResponse
     public string Answer { get; init; } = "";
     public string? Model { get; init; }
     public long TookMs { get; init; }
+    public bool IsBlocked { get; init; }
+    public string? BlockReason { get; init; }
 
     // Read from PostgreSQL. [n] in the answer points to the n-th card.
     public IReadOnlyList<ProductCard> Products { get; init; } = [];

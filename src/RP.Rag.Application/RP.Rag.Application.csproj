@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Prompts\system-prompt.md" LogicalName="system-prompt.md" />
+    <EmbeddedResource Include="..\..\Rules\guardrails.md" LogicalName="Rules.guardrails.md" />
+    <EmbeddedResource Include="..\..\Rules\response-style.md" LogicalName="Rules.response-style.md" />
   </ItemGroup>
 
   <ItemGroup>

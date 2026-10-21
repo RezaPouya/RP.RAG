@@ -8,17 +8,30 @@ namespace RP.RAG.Application.Ask;
 
 public sealed class PromptBuilder
 {
-    private const string ResourceName = "system-prompt.md";
+    private static readonly string[] ResourceNames =
+    [
+        "system-prompt.md",
+        "Rules.guardrails.md",
+        "Rules.response-style.md"
+    ];
 
     public string SystemPrompt { get; }
 
     public PromptBuilder()
     {
-        using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(ResourceName)
-            ?? throw new InvalidOperationException($"Embedded resource '{ResourceName}' was not found.");
+        var assembly = Assembly.GetExecutingAssembly();
+        SystemPrompt = string.Join(
+            "\n\n",
+            ResourceNames.Select(resourceName => ReadResource(assembly, resourceName)));
+    }
+
+    private static string ReadResource(Assembly assembly, string resourceName)
+    {
+        using var stream = assembly.GetManifestResourceStream(resourceName)
+            ?? throw new InvalidOperationException($"Embedded resource '{resourceName}' was not found.");
 
         using var reader = new StreamReader(stream);
-        SystemPrompt = reader.ReadToEnd().Trim();
+        return reader.ReadToEnd().Trim();
     }
 
     public string BuildUserPrompt(

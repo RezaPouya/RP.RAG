@@ -58,6 +58,34 @@ public static class DependencyInjection
         services.AddScoped<IHybridSearch, HybridSearchService>();
         services.AddScoped<IProductCatalogService, ProductCatalogService>();
 
+        // Laya input guardrail
+        services.AddOptions<LayaOptions>()
+            .BindConfiguration(LayaOptions.SectionName)
+            .Validate(o => Uri.TryCreate(o.Url, UriKind.Absolute, out _), "Laya:Url must be an absolute URL.")
+            .Validate(o => o.RequestTimeoutSeconds > 0, "Laya:RequestTimeoutSeconds must be positive.")
+            .Validate(o => o.JailbreakThreshold is >= 0 and <= 1, "Laya:JailbreakThreshold must be between 0 and 1.")
+            .Validate(o => o.PromptInjectionThreshold is >= 0 and <= 1, "Laya:PromptInjectionThreshold must be between 0 and 1.")
+            .Validate(o => o.PolicyViolationThreshold is >= 0 and <= 1, "Laya:PolicyViolationThreshold must be between 0 and 1.")
+            .Validate(o => o.ChunkPromptInjectionThreshold is >= 0 and <= 1, "Laya:ChunkPromptInjectionThreshold must be between 0 and 1.")
+            .Validate(o => o.FinalJailbreakThreshold is >= 0 and <= 1, "Laya:FinalJailbreakThreshold must be between 0 and 1.")
+            .Validate(o => o.FinalPromptInjectionThreshold is >= 0 and <= 1, "Laya:FinalPromptInjectionThreshold must be between 0 and 1.")
+            .ValidateOnStart();
+
+        services.AddHttpClient(ServiceKeys.Laya, (sp, http) =>
+        {
+            var opts = sp.GetRequiredService<IOptions<LayaOptions>>().Value;
+            http.BaseAddress = new Uri(opts.Url.TrimEnd('/') + "/");
+            http.Timeout = TimeSpan.FromSeconds(opts.RequestTimeoutSeconds);
+
+            if (!string.IsNullOrWhiteSpace(opts.ApiKey))
+                http.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", opts.ApiKey);
+        });
+
+        services.AddScoped<IPromptGuardrail, LayaPromptGuardrail>();
+        services.AddScoped<IChunkRelevanceEvaluator, LayaChunkRelevanceEvaluator>();
+        services.AddScoped<IFinalPromptGuardrail, LayaFinalPromptGuardrail>();
+
         services.AddSingleton<CategoryTokenIndexCache>();
         services.AddScoped<CategoryTokenIndexBuilder>();
         services.AddHostedService<CategoryTokenIndexWarmupService>();

@@ -24,5 +24,7 @@
     <Project Path="src/RP.Rag.Indexer/RP.Rag.Indexer.csproj" Id="0fe27b6f-f502-4c67-ae02-cd9372e65101" />
     <Project Path="src/RP.Rag.Infrastructure/RP.Rag.Infrastructure.csproj" Id="4909c678-7182-4383-85ee-605afbca2086" />
   </Folder>
-  <Folder Name="/tests/" />
+  <Folder Name="/tests/">
+    <Project Path="tests/RP.Rag.Tests/RP.Rag.Tests.csproj" Id="21f7271d-0180-48b7-a765-cfbbf1a31065" />
+  </Folder>
 </Solution>

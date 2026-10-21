@@ -17,13 +17,16 @@ public sealed class AskController(
 
         try
         {
-            return Ok(await ask.AskAsync(request.Question, request.TopK, ct));
+            var response = await ask.AskAsync(request.Question, request.TopK, ct);
+            return response.IsBlocked
+                ? StatusCode(StatusCodes.Status403Forbidden, response)
+                : Ok(response);
         }
         catch (HttpRequestException ex)
         {
             logger.LogError(ex, "The language model request failed.");
             return StatusCode(StatusCodes.Status502BadGateway,
-                new { error = "The language model is not available." });
+                new { error = "A required upstream service is not available." });
         }
     }
 }

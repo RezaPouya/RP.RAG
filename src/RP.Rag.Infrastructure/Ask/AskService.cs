@@ -12,6 +12,9 @@ public sealed class AskService(
     IHybridSearch hybrid,
     IProductCatalogService catalog,
     IAnswerGeneratorResolver generatorResolver,
+    IPromptGuardrail promptGuardrail,
+    IChunkRelevanceEvaluator chunkRelevanceEvaluator,
+    IFinalPromptGuardrail finalPromptGuardrail,
     PromptBuilder prompts,
     IOptions<AskOptions> options,
     ILogger<AskService> logger) : IAskService
@@ -24,6 +27,24 @@ public sealed class AskService(
         var sw = Stopwatch.StartNew();
 
         question = question.Trim();
+
+        var guardrail = await promptGuardrail.EvaluateAsync(question, ct);
+        if (!guardrail.IsAllowed)
+        {
+            logger.LogWarning(
+                "Blocked incoming prompt. Jailbreak={JailbreakProbability}, PromptInjection={PromptInjectionProbability}",
+                guardrail.JailbreakProbability,
+                guardrail.PromptInjectionProbability);
+
+            return new AskResponse
+            {
+                Question = question,
+                Answer = "I can't help with that request.",
+                IsBlocked = true,
+                BlockReason = guardrail.BlockReason,
+                TookMs = sw.ElapsedMilliseconds
+            };
+        }
 
         if (question.Length > opts.MaxQuestionLength)
             question = question[..opts.MaxQuestionLength];
@@ -53,8 +74,47 @@ public sealed class AskService(
         }
 
         var productIds = products.Select(p => p.ProductId).ToHashSet();
-        var chunks = retrieval.Chunks.Where(c => productIds.Contains(c.ProductId)).ToList();
+        var retrievedChunks = retrieval.Chunks.Where(c => productIds.Contains(c.ProductId)).ToList();
+        var relevanceResults = await chunkRelevanceEvaluator.EvaluateAsync(question, retrievedChunks, ct);
+        var relevanceByChunk = relevanceResults.ToDictionary(result => result.ChunkId);
+        var chunks = retrievedChunks
+            .Where(chunk => relevanceByChunk.TryGetValue(chunk.ChunkId, out var result) &&
+                (result.Relevance == ChunkRelevance.Relevant ||
+                    (opts.IncludePartiallyRelevantChunks && result.Relevance == ChunkRelevance.PartiallyRelevant)) &&
+                !result.ContainsPromptInjection)
+            .ToList();
+
+        var partiallyRelevantCount = relevanceResults.Count(result => result.Relevance == ChunkRelevance.PartiallyRelevant);
+        var irrelevantCount = relevanceResults.Count(result => result.Relevance == ChunkRelevance.Irrelevant);
+        var injectionFlaggedCount = relevanceResults.Count(result => result.ContainsPromptInjection);
+
+        logger.LogInformation(
+            "Stage 2 retained {KeptChunks} of {RetrievedChunks} chunks; partial={PartialChunks}, irrelevant={IrrelevantChunks}, injection={InjectionChunks}",
+            chunks.Count,
+            retrievedChunks.Count,
+            partiallyRelevantCount,
+            irrelevantCount,
+            injectionFlaggedCount);
+
         var userPrompt = prompts.BuildUserPrompt(question, products, chunks);
+
+        var finalAssessment = await finalPromptGuardrail.EvaluateAsync(prompts.SystemPrompt, userPrompt, ct);
+        if (!finalAssessment.IsAllowed)
+        {
+            logger.LogWarning(
+                "Blocked assembled request. Jailbreak={JailbreakProbability}, PromptInjection={PromptInjectionProbability}",
+                finalAssessment.JailbreakProbability,
+                finalAssessment.PromptInjectionProbability);
+
+            return new AskResponse
+            {
+                Question = question,
+                Answer = "I can't safely use the assembled request to answer this question.",
+                IsBlocked = true,
+                BlockReason = finalAssessment.BlockReason,
+                TookMs = sw.ElapsedMilliseconds
+            };
+        }
 
         IAnswerGenerator generator = generatorResolver.Resolve();
 
