@@ -17,10 +17,15 @@ public sealed class AskController(
 
         try
         {
-            var response = await ask.AskAsync(request.Question, request.TopK, ct);
+            var response = await ask.AskAsync(
+                request.Question, request.TopK, request.ConversationId, ct);
             return response.IsBlocked
                 ? StatusCode(StatusCodes.Status403Forbidden, response)
                 : Ok(response);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound(new { error = "Conversation was not found." });
         }
         catch (HttpRequestException ex)
         {
@@ -35,4 +40,5 @@ public sealed class AskRequest
 {
     public string Question { get; init; } = "";
     public int? TopK { get; init; }
+    public Guid? ConversationId { get; init; }
 }

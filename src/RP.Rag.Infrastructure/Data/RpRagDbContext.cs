@@ -15,6 +15,8 @@ public sealed class RpRagDbContext(DbContextOptions<RpRagDbContext> options)
     public DbSet<ProductCategory> Categories => Set<ProductCategory>();
     public DbSet<Tag> Tags => Set<Tag>();
     public DbSet<ProductDocument> Documents => Set<ProductDocument>();
+    public DbSet<Conversation> Conversations => Set<Conversation>();
+    public DbSet<ConversationMessage> ConversationMessages => Set<ConversationMessage>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

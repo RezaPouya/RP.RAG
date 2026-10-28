@@ -33,6 +33,50 @@ public sealed class AskServiceGuardrailTests
     }
 
     [Fact]
+    public async Task AskAsync_CreatesConversationAndPersistsBothTurnMessages()
+    {
+        var fixture = CreateFixture();
+
+        var result = await fixture.Service.AskAsync("Find a product with a durable battery");
+
+        Assert.Equal(fixture.ConversationId, result.ConversationId);
+        Assert.Equal(2, result.ConversationCount);
+        fixture.ConversationMemory.Verify(x => x.CreateAsync(It.IsAny<CancellationToken>()), Times.Once);
+        fixture.ConversationMemory.Verify(x => x.AddMessageAsync(
+            fixture.ConversationId, ConversationMessageRole.User, "Find a product with a durable battery",
+            It.IsAny<CancellationToken>()), Times.Once);
+        fixture.ConversationMemory.Verify(x => x.AddMessageAsync(
+            fixture.ConversationId, ConversationMessageRole.Assistant, "Answer [1]",
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task AskAsync_AddsPreviousConversationMemoryToTheGenerationContext()
+    {
+        var fixture = CreateFixture();
+        var messageCount = 2;
+        fixture.ConversationMemory.Setup(x => x.AddMessageAsync(
+                It.IsAny<Guid>(), It.IsAny<ConversationMessageRole>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(() => Interlocked.Increment(ref messageCount));
+        string? assembledPrompt = null;
+        fixture.FinalGuardrail
+            .Setup(x => x.EvaluateAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Callback<string, string, CancellationToken>((_, prompt, _) => assembledPrompt = prompt)
+            .ReturnsAsync(new FinalPromptGuardrailResult(true, 0.01, 0.01));
+
+        var result = await fixture.Service.AskAsync(
+            "Does it support Bluetooth?", conversationId: fixture.ConversationId);
+
+        Assert.Equal(4, result.ConversationCount);
+        Assert.Contains("Distilled notes:", assembledPrompt);
+        Assert.Contains("The user prefers a quiet keyboard.", assembledPrompt);
+        Assert.Contains("I need a quiet keyboard.", assembledPrompt);
+        Assert.Contains("Does it support Bluetooth?", assembledPrompt);
+        fixture.ConversationMemory.Verify(x => x.GetMemoryAsync(
+            fixture.ConversationId, It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
     public async Task AskAsync_ByDefaultKeepsOnlyFullyRelevantNonInjectedChunks()
     {
         var fixture = CreateFixture();
@@ -197,6 +241,26 @@ public sealed class AskServiceGuardrailTests
         var generatorResolver = new Mock<IAnswerGeneratorResolver>();
         generatorResolver.Setup(x => x.Resolve()).Returns(generator.Object);
 
+        var conversationMemory = new Mock<IConversationMemoryService>();
+        var conversationId = Guid.NewGuid();
+        conversationMemory.Setup(x => x.CreateAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ConversationDetails(conversationId, DateTime.UtcNow, DateTime.UtcNow, 0, null, []));
+        conversationMemory.Setup(x => x.GetMemoryAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Guid id, CancellationToken _) => new ConversationMemory(
+                id,
+                2,
+                "The user prefers a quiet keyboard.",
+                [
+                    new ConversationMessageDto(1, "user", "I need a quiet keyboard.", DateTime.UtcNow),
+                    new ConversationMessageDto(2, "assistant", "The Kestrel Neo SE may fit.", DateTime.UtcNow)
+                ]));
+        var messageCount = 0;
+        conversationMemory.Setup(x => x.AddMessageAsync(
+                It.IsAny<Guid>(), It.IsAny<ConversationMessageRole>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(() => Interlocked.Increment(ref messageCount));
+        conversationMemory.Setup(x => x.DistillIfNeededAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
         var service = new AskService(
             hybrid.Object,
             catalog.Object,
@@ -204,11 +268,13 @@ public sealed class AskServiceGuardrailTests
             inputGuardrail.Object,
             relevance.Object,
             finalGuardrail.Object,
+            conversationMemory.Object,
             new PromptBuilder(),
             Options.Create(options ?? new AskOptions()),
             NullLogger<AskService>.Instance);
 
-        return new Fixture(service, hybrid, inputGuardrail, finalGuardrail, generatorResolver, generator);
+        return new Fixture(service, hybrid, inputGuardrail, finalGuardrail, generatorResolver, generator,
+            conversationMemory, conversationId);
     }
 
     private static Mock<IHttpClientFactory> CreateHttpClientFactory(
@@ -235,7 +301,9 @@ public sealed class AskServiceGuardrailTests
         Mock<IPromptGuardrail> InputGuardrail,
         Mock<IFinalPromptGuardrail> FinalGuardrail,
         Mock<IAnswerGeneratorResolver> GeneratorResolver,
-        Mock<IAnswerGenerator> Generator);
+        Mock<IAnswerGenerator> Generator,
+        Mock<IConversationMemoryService> ConversationMemory,
+        Guid ConversationId);
 
     private sealed class StubHttpMessageHandler(Func<HttpRequestMessage, HttpResponseMessage> responseFactory)
         : HttpMessageHandler

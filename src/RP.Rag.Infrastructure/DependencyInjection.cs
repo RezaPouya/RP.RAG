@@ -130,7 +130,15 @@ public static class DependencyInjection
         services.AddOptions<AskOptions>()
             .BindConfiguration(AskOptions.SectionName);
 
+        services.AddOptions<ConversationOptions>()
+            .BindConfiguration(ConversationOptions.SectionName)
+            .Validate(o => o.RecentMessages > 0, "ConversationMemory:RecentMessages must be positive.")
+            .Validate(o => o.DistillAfterMessageCount > 0, "ConversationMemory:DistillAfterMessageCount must be positive.")
+            .Validate(o => o.MaxDistilledMemoryCharacters > 0, "ConversationMemory:MaxDistilledMemoryCharacters must be positive.")
+            .ValidateOnStart();
+
         services.AddSingleton<PromptBuilder>();
+        services.AddScoped<IConversationMemoryService, ConversationMemoryService>();
         services.AddScoped<IAskService, AskService>();
 
         services.AddScoped<SeedLoader>();

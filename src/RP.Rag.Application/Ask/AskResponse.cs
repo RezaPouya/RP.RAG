@@ -4,6 +4,8 @@ namespace RP.RAG.Application.Ask;
 
 public sealed class AskResponse
 {
+    public Guid ConversationId { get; init; }
+    public int ConversationCount { get; init; }
     public string Question { get; init; } = "";
     public string Answer { get; init; } = "";
     public string? Model { get; init; }

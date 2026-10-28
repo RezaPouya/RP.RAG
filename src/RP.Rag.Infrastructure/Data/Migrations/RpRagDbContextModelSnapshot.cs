@@ -24,6 +24,66 @@ namespace RP.Rag.Infrastructure.Data.Migrations
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "vector");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("RP.Rag.Domain.Entities.Conversation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DistilledMemory")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DistilledThroughSequence")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MessageCount")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Conversations", (string)null);
+                });
+
+            modelBuilder.Entity("RP.Rag.Domain.Entities.ConversationMessage", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ConversationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<int>("Sequence")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConversationId", "Sequence")
+                        .IsUnique();
+
+                    b.ToTable("ConversationMessages", (string)null);
+                });
+
             modelBuilder.Entity("RP.Rag.Domain.Entities.ProductCategory", b =>
                 {
                     b.Property<int>("Id")
@@ -45,46 +105,6 @@ namespace RP.Rag.Infrastructure.Data.Migrations
                     b.HasIndex("Name");
 
                     b.ToTable("ProductCategories", (string)null);
-                });
-
-            modelBuilder.Entity("RP.Rag.Domain.Entities.ProductDocument", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("Type");
-
-                    b.ToTable("ProductDocuments", (string)null);
                 });
 
             modelBuilder.Entity("RP.Rag.Domain.Entities.Products.Product", b =>
@@ -211,18 +231,58 @@ namespace RP.Rag.Infrastructure.Data.Migrations
 
                     b.HasIndex("DocumentId");
 
-                    b.HasIndex("Embedding");
+                    b.HasIndex("Embedding")
+                        .HasAnnotation("Npgsql:StorageParameter:ef_construction", 64)
+                        .HasAnnotation("Npgsql:StorageParameter:m", 16);
 
                     NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Embedding"), "hnsw");
                     NpgsqlIndexBuilderExtensions.HasOperators(b.HasIndex("Embedding"), new[] { "vector_cosine_ops" });
-                    NpgsqlIndexBuilderExtensions.HasStorageParameter(b.HasIndex("Embedding"), "ef_construction", 64);
-                    NpgsqlIndexBuilderExtensions.HasStorageParameter(b.HasIndex("Embedding"), "m", 16);
 
                     b.HasIndex("EmbeddingModel");
 
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductChunks", (string)null);
+                });
+
+            modelBuilder.Entity("RP.Rag.Domain.Entities.Products.ProductDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("Type");
+
+                    b.ToTable("ProductDocuments", (string)null);
                 });
 
             modelBuilder.Entity("RP.Rag.Domain.Entities.Products.ProductSync", b =>
@@ -305,15 +365,15 @@ namespace RP.Rag.Infrastructure.Data.Migrations
                     b.ToTable("Tags", (string)null);
                 });
 
-            modelBuilder.Entity("RP.Rag.Domain.Entities.ProductDocument", b =>
+            modelBuilder.Entity("RP.Rag.Domain.Entities.ConversationMessage", b =>
                 {
-                    b.HasOne("RP.Rag.Domain.Entities.Products.Product", "Product")
-                        .WithMany("Documents")
-                        .HasForeignKey("ProductId")
+                    b.HasOne("RP.Rag.Domain.Entities.Conversation", "Conversation")
+                        .WithMany("Messages")
+                        .HasForeignKey("ConversationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.Navigation("Conversation");
                 });
 
             modelBuilder.Entity("RP.Rag.Domain.Entities.Products.Product", b =>
@@ -329,7 +389,7 @@ namespace RP.Rag.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("RP.Rag.Domain.Entities.Products.ProductChunk", b =>
                 {
-                    b.HasOne("RP.Rag.Domain.Entities.ProductDocument", "Document")
+                    b.HasOne("RP.Rag.Domain.Entities.Products.ProductDocument", "Document")
                         .WithMany("Chunks")
                         .HasForeignKey("DocumentId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -341,6 +401,17 @@ namespace RP.Rag.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Document");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("RP.Rag.Domain.Entities.Products.ProductDocument", b =>
+                {
+                    b.HasOne("RP.Rag.Domain.Entities.Products.Product", "Product")
+                        .WithMany("Documents")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
                 });
@@ -375,14 +446,14 @@ namespace RP.Rag.Infrastructure.Data.Migrations
                     b.Navigation("Tag");
                 });
 
+            modelBuilder.Entity("RP.Rag.Domain.Entities.Conversation", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("RP.Rag.Domain.Entities.ProductCategory", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("RP.Rag.Domain.Entities.ProductDocument", b =>
-                {
-                    b.Navigation("Chunks");
                 });
 
             modelBuilder.Entity("RP.Rag.Domain.Entities.Products.Product", b =>
@@ -394,6 +465,11 @@ namespace RP.Rag.Infrastructure.Data.Migrations
                     b.Navigation("ProductTags");
 
                     b.Navigation("Sync");
+                });
+
+            modelBuilder.Entity("RP.Rag.Domain.Entities.Products.ProductDocument", b =>
+                {
+                    b.Navigation("Chunks");
                 });
 
             modelBuilder.Entity("RP.Rag.Domain.Entities.Tag", b =>

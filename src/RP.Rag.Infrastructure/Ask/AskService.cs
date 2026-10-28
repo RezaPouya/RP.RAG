@@ -15,22 +15,46 @@ public sealed class AskService(
     IPromptGuardrail promptGuardrail,
     IChunkRelevanceEvaluator chunkRelevanceEvaluator,
     IFinalPromptGuardrail finalPromptGuardrail,
+    IConversationMemoryService conversationMemory,
     PromptBuilder prompts,
     IOptions<AskOptions> options,
     ILogger<AskService> logger) : IAskService
 {
     private static readonly Regex UrlPattern = new(@"(https?://|www\.)\S+", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-    public async Task<AskResponse> AskAsync(string question, int? topProducts = null, CancellationToken ct = default)
+    public async Task<AskResponse> AskAsync(
+        string question,
+        int? topProducts = null,
+        Guid? conversationId = null,
+        CancellationToken ct = default)
     {
         var opts = options.Value;
         var sw = Stopwatch.StartNew();
 
         question = question.Trim();
 
+        ConversationMemory memory;
+        if (conversationId is null)
+        {
+            var created = await conversationMemory.CreateAsync(ct);
+            memory = new ConversationMemory(created.ConversationId, created.MessageCount, created.DistilledMemory, []);
+        }
+        else
+        {
+            memory = await conversationMemory.GetMemoryAsync(conversationId.Value, ct)
+                ?? throw new KeyNotFoundException($"Conversation '{conversationId}' was not found.");
+        }
+        var activeConversationId = memory.ConversationId;
+
         var guardrail = await promptGuardrail.EvaluateAsync(question, ct);
+        if (question.Length > opts.MaxQuestionLength)
+            question = question[..opts.MaxQuestionLength];
+
         if (!guardrail.IsAllowed)
         {
+            await conversationMemory.AddMessageAsync(
+                activeConversationId, ConversationMessageRole.User, question, ct);
+            var blockedCount = await SaveTurnAsync("I can't help with that request.");
             logger.LogWarning(
                 "Blocked incoming prompt. Jailbreak={JailbreakProbability}, PromptInjection={PromptInjectionProbability}",
                 guardrail.JailbreakProbability,
@@ -38,6 +62,8 @@ public sealed class AskService(
 
             return new AskResponse
             {
+                ConversationId = activeConversationId,
+                ConversationCount = blockedCount,
                 Question = question,
                 Answer = "I can't help with that request.",
                 IsBlocked = true,
@@ -46,8 +72,8 @@ public sealed class AskService(
             };
         }
 
-        if (question.Length > opts.MaxQuestionLength)
-            question = question[..opts.MaxQuestionLength];
+        await conversationMemory.AddMessageAsync(
+            activeConversationId, ConversationMessageRole.User, question, ct);
 
         var retrieval = await hybrid.RetrieveAsync(
             question,
@@ -65,8 +91,11 @@ public sealed class AskService(
 
         if (products.Count == 0)
         {
+            var noResultsCount = await SaveTurnAsync(opts.NoResultsAnswer);
             return new AskResponse
             {
+                ConversationId = activeConversationId,
+                ConversationCount = noResultsCount,
                 Question = question,
                 Answer = opts.NoResultsAnswer,
                 TookMs = sw.ElapsedMilliseconds
@@ -96,11 +125,13 @@ public sealed class AskService(
             irrelevantCount,
             injectionFlaggedCount);
 
-        var userPrompt = prompts.BuildUserPrompt(question, products, chunks);
+        var userPrompt = prompts.BuildUserPrompt(question, products, chunks, memory);
 
         var finalAssessment = await finalPromptGuardrail.EvaluateAsync(prompts.SystemPrompt, userPrompt, ct);
         if (!finalAssessment.IsAllowed)
         {
+            const string blockedAnswer = "I can't safely use the assembled request to answer this question.";
+            var blockedCount = await SaveTurnAsync(blockedAnswer);
             logger.LogWarning(
                 "Blocked assembled request. Jailbreak={JailbreakProbability}, PromptInjection={PromptInjectionProbability}",
                 finalAssessment.JailbreakProbability,
@@ -108,8 +139,10 @@ public sealed class AskService(
 
             return new AskResponse
             {
+                ConversationId = activeConversationId,
+                ConversationCount = blockedCount,
                 Question = question,
-                Answer = "I can't safely use the assembled request to answer this question.",
+                Answer = blockedAnswer,
                 IsBlocked = true,
                 BlockReason = finalAssessment.BlockReason,
                 TookMs = sw.ElapsedMilliseconds
@@ -121,6 +154,7 @@ public sealed class AskService(
         var raw = await generator.GenerateAsync(prompts.SystemPrompt, userPrompt, ct);
 
         var answer = UrlPattern.Replace(raw, "").Trim();
+        var conversationCount = await SaveTurnAsync(answer);
 
         var refByProduct = products
             .Select((p, i) => (p.ProductId, Ref: i + 1))
@@ -134,6 +168,8 @@ public sealed class AskService(
 
         return new AskResponse
         {
+            ConversationId = activeConversationId,
+            ConversationCount = conversationCount,
             Question = question,
             Answer = answer,
             Model = generator.ModelName,
@@ -149,5 +185,13 @@ public sealed class AskService(
                 })
                 .ToList()
         };
+
+        async Task<int> SaveTurnAsync(string answerText)
+        {
+            var count = await conversationMemory.AddMessageAsync(
+                activeConversationId, ConversationMessageRole.Assistant, answerText, ct);
+            await conversationMemory.DistillIfNeededAsync(activeConversationId, ct);
+            return count;
+        }
     }
 }

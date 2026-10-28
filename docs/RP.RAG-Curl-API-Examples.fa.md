@@ -154,3 +154,38 @@ curl.exe -i --request POST "$api/api/ask" `
 محافظ ورودی، علاوه بر جیل‌بریک و تزریق، درخواست‌های خارج از محدودهٔ کاتالوگ، محتوای محدودشده و درخواست منبع بیرونی را نیز طبق آستانهٔ `Laya:PolicyViolationThreshold` ارزیابی می‌کند. این تصمیم‌ها احتمالاتی‌اند؛ مجموعهٔ کالیبراسیون در `tests/evaluation/guardrail-cases.json` قرار دارد و با `tests/evaluation/Invoke-GuardrailEvaluation.ps1` می‌توان آن را در برابر سرویس Laya اجرا کرد.
 
 در مرحلهٔ ارزیابی قطعه‌ها، فقط قطعه‌های `Relevant` به‌طور پیش‌فرض وارد زمینه می‌شوند. برای افزودن قطعه‌های `PartiallyRelevant`، گزینهٔ `Ask:IncludePartiallyRelevantChunks` را آگاهانه روی `true` بگذارید؛ قطعه‌های نامرتبط و قطعه‌های دارای تزریق همچنان حذف می‌شوند. این گزینه پیش از تغییر در محیط اصلی باید با دادهٔ واقعی ارزیابی شود.
+
+## گفتگو و حافظهٔ گفتگو
+
+یک گفتگو ایجاد کنید؛ پاسخ، `conversationId` را برمی‌گرداند:
+
+```powershell
+$conversation = curl.exe -sS --request POST "$api/api/conversations" `
+  --header "Content-Type: application/json" `
+  --data-binary "{}" | ConvertFrom-Json
+
+$conversationId = $conversation.conversationId
+```
+
+برای ارسال پیام بعدی همان شناسه را در مسیر گفتگو بفرستید. پاسخ `conversationCount` (تعداد پیام‌های ذخیره‌شده) و همان شناسه را دارد:
+
+```powershell
+$message = @'
+{
+  "message": "How do I pair the Kestrel Neo SE keyboard?",
+  "topK": 5
+}
+'@
+
+curl.exe -i --request POST "$api/api/conversations/$conversationId/messages" `
+  --header "Content-Type: application/json; charset=utf-8" `
+  --data-binary $message
+```
+
+گفتگو و پیام‌های ذخیره‌شده را بخوانید:
+
+```powershell
+curl.exe -i "$api/api/conversations/$conversationId"
+```
+
+همچنین `POST /api/ask` می‌پذیرد که `conversationId` در JSON اختیاری باشد. اگر شناسه نفرستید، Ask خودکار گفتگو می‌سازد و شناسه را در پاسخ برمی‌گرداند. حافظه از پیام‌های قبلی و خلاصهٔ دوره‌ای ساخته می‌شود؛ هر دو به‌عنوان دادهٔ نامطمئن وارد context می‌شوند. به‌طور پیش‌فرض شش پیام آخر کامل می‌مانند و وقتی دست‌کم ۱۲ پیامِ قدیمی‌ترِ خلاصه‌نشده وجود داشته باشد، آن بخش خلاصه می‌شود. شناسهٔ گفتگو احراز هویت نیست.
