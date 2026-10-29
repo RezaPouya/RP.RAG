@@ -11,6 +11,8 @@ internal sealed class ConversationDbConfiguration : IEntityTypeConfiguration<Con
         entity.ToTable("Conversations");
         entity.HasKey(x => x.Id);
         entity.Property(x => x.DistilledMemory).HasColumnType("text");
+        entity.Property(x => x.SemanticMemoryJson).HasColumnType("jsonb");
+        entity.Property(x => x.EpisodicMemoryJson).HasColumnType("jsonb");
         entity.Property(x => x.MessageCount).IsRequired();
         entity.Property(x => x.DistilledThroughSequence).IsRequired();
     }

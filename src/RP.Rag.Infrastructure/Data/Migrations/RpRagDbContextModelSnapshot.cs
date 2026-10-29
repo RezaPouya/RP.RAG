@@ -42,6 +42,12 @@ namespace RP.Rag.Infrastructure.Data.Migrations
                     b.Property<int>("MessageCount")
                         .HasColumnType("integer");
 
+                    b.Property<string>("SemanticMemoryJson")
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("EpisodicMemoryJson")
+                        .HasColumnType("jsonb");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 

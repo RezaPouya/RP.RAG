@@ -135,6 +135,8 @@ public static class DependencyInjection
             .Validate(o => o.RecentMessages > 0, "ConversationMemory:RecentMessages must be positive.")
             .Validate(o => o.DistillAfterMessageCount > 0, "ConversationMemory:DistillAfterMessageCount must be positive.")
             .Validate(o => o.MaxDistilledMemoryCharacters > 0, "ConversationMemory:MaxDistilledMemoryCharacters must be positive.")
+            .Validate(o => o.MaxSemanticFacts > 0, "ConversationMemory:MaxSemanticFacts must be positive.")
+            .Validate(o => o.MaxEpisodes > 0, "ConversationMemory:MaxEpisodes must be positive.")
             .ValidateOnStart();
 
         services.AddSingleton<PromptBuilder>();

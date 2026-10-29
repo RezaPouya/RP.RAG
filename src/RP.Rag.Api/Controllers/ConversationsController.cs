@@ -24,6 +24,13 @@ public sealed class ConversationsController(
         return conversation is null ? NotFound() : Ok(conversation);
     }
 
+    [HttpDelete("{conversationId:guid}")]
+    public async Task<IActionResult> Delete(Guid conversationId, CancellationToken cancellationToken)
+    {
+        var deleted = await conversations.DeleteAsync(conversationId, cancellationToken);
+        return deleted ? NoContent() : NotFound();
+    }
+
     [HttpPost("{conversationId:guid}/messages")]
     public async Task<IActionResult> PostMessage(
         Guid conversationId,
