@@ -82,7 +82,6 @@ public static class DependencyInjection
                     new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", opts.ApiKey);
         });
 
-        services.AddScoped<IPromptGuardrail, LayaPromptGuardrail>();
         services.AddScoped<IChunkRelevanceEvaluator, LayaChunkRelevanceEvaluator>();
         services.AddScoped<IFinalPromptGuardrail, LayaFinalPromptGuardrail>();
 

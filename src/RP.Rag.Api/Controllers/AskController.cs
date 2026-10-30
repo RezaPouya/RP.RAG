@@ -27,6 +27,12 @@ public sealed class AskController(
         {
             return NotFound(new { error = "Conversation was not found." });
         }
+        catch (OperationCanceledException) when (!ct.IsCancellationRequested)
+        {
+            logger.LogWarning("An upstream service timed out while processing an Ask request.");
+            return StatusCode(StatusCodes.Status504GatewayTimeout,
+                new { error = "A required service took too long to respond. Please retry the request." });
+        }
         catch (HttpRequestException ex)
         {
             logger.LogError(ex, "The language model request failed.");

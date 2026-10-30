@@ -53,6 +53,12 @@ public sealed class ConversationsController(
         {
             return NotFound(new { error = "Conversation was not found." });
         }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            logger.LogWarning("An upstream service timed out while processing a conversation message.");
+            return StatusCode(StatusCodes.Status504GatewayTimeout,
+                new { error = "A required service took too long to respond. Please retry the request." });
+        }
         catch (HttpRequestException ex)
         {
             logger.LogError(ex, "A required upstream service failed while processing a conversation message.");

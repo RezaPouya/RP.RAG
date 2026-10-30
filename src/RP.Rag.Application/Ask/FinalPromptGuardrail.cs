@@ -8,14 +8,19 @@ public interface IFinalPromptGuardrail
     Task<FinalPromptGuardrailResult> EvaluateAsync(
         string systemPrompt,
         string assembledPrompt,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default,
+        string? originalQuestion = null);
 }
 
 /// <summary>
-/// Contains Stage 3 policy decisions for the assembled request.
+/// Contains input-policy and assembled-request decisions returned by the combined Laya call.
 /// </summary>
 public sealed record FinalPromptGuardrailResult(
     bool IsAllowed,
     double JailbreakProbability,
     double PromptInjectionProbability,
-    string? BlockReason = null);
+    string? BlockReason = null,
+    bool IsUserPromptBlocked = false,
+    double UserJailbreakProbability = 0,
+    double UserPromptInjectionProbability = 0,
+    double PolicyViolationProbability = 0);

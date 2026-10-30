@@ -12,7 +12,6 @@ public sealed class AskService(
     IHybridSearch hybrid,
     IProductCatalogService catalog,
     IAnswerGeneratorResolver generatorResolver,
-    IPromptGuardrail promptGuardrail,
     IChunkRelevanceEvaluator chunkRelevanceEvaluator,
     IFinalPromptGuardrail finalPromptGuardrail,
     IConversationMemoryService conversationMemory,
@@ -32,6 +31,8 @@ public sealed class AskService(
         var sw = Stopwatch.StartNew();
 
         question = question.Trim();
+        if (question.Length > opts.MaxQuestionLength)
+            question = question[..opts.MaxQuestionLength];
 
         ConversationMemory memory;
         if (conversationId is null)
@@ -45,32 +46,6 @@ public sealed class AskService(
                 ?? throw new KeyNotFoundException($"Conversation '{conversationId}' was not found.");
         }
         var activeConversationId = memory.ConversationId;
-
-        var guardrail = await promptGuardrail.EvaluateAsync(question, ct);
-        if (question.Length > opts.MaxQuestionLength)
-            question = question[..opts.MaxQuestionLength];
-
-        if (!guardrail.IsAllowed)
-        {
-            await conversationMemory.AddMessageAsync(
-                activeConversationId, ConversationMessageRole.User, question, ct);
-            var blockedCount = await SaveTurnAsync("I can't help with that request.");
-            logger.LogWarning(
-                "Blocked incoming prompt. Jailbreak={JailbreakProbability}, PromptInjection={PromptInjectionProbability}",
-                guardrail.JailbreakProbability,
-                guardrail.PromptInjectionProbability);
-
-            return new AskResponse
-            {
-                ConversationId = activeConversationId,
-                ConversationCount = blockedCount,
-                Question = question,
-                Answer = "I can't help with that request.",
-                IsBlocked = true,
-                BlockReason = guardrail.BlockReason,
-                TookMs = sw.ElapsedMilliseconds
-            };
-        }
 
         await conversationMemory.AddMessageAsync(
             activeConversationId, ConversationMessageRole.User, question, ct);
@@ -91,6 +66,12 @@ public sealed class AskService(
 
         if (products.Count == 0)
         {
+            var emptyPrompt = prompts.BuildUserPrompt(question, [], [], memory);
+            var policyAssessment = await finalPromptGuardrail.EvaluateAsync(
+                prompts.SystemPrompt, emptyPrompt, ct, question);
+            if (!policyAssessment.IsAllowed)
+                return await BlockAsync(policyAssessment);
+
             var noResultsCount = await SaveTurnAsync(opts.NoResultsAnswer);
             return new AskResponse
             {
@@ -127,27 +108,10 @@ public sealed class AskService(
 
         var userPrompt = prompts.BuildUserPrompt(question, products, chunks, memory);
 
-        var finalAssessment = await finalPromptGuardrail.EvaluateAsync(prompts.SystemPrompt, userPrompt, ct);
+        var finalAssessment = await finalPromptGuardrail.EvaluateAsync(
+            prompts.SystemPrompt, userPrompt, ct, question);
         if (!finalAssessment.IsAllowed)
-        {
-            const string blockedAnswer = "I can't safely use the assembled request to answer this question.";
-            var blockedCount = await SaveTurnAsync(blockedAnswer);
-            logger.LogWarning(
-                "Blocked assembled request. Jailbreak={JailbreakProbability}, PromptInjection={PromptInjectionProbability}",
-                finalAssessment.JailbreakProbability,
-                finalAssessment.PromptInjectionProbability);
-
-            return new AskResponse
-            {
-                ConversationId = activeConversationId,
-                ConversationCount = blockedCount,
-                Question = question,
-                Answer = blockedAnswer,
-                IsBlocked = true,
-                BlockReason = finalAssessment.BlockReason,
-                TookMs = sw.ElapsedMilliseconds
-            };
-        }
+            return await BlockAsync(finalAssessment);
 
         IAnswerGenerator generator = generatorResolver.Resolve();
 
@@ -192,6 +156,32 @@ public sealed class AskService(
                 activeConversationId, ConversationMessageRole.Assistant, answerText, ct);
             await conversationMemory.DistillIfNeededAsync(activeConversationId, ct);
             return count;
+        }
+
+        async Task<AskResponse> BlockAsync(FinalPromptGuardrailResult assessment)
+        {
+            var blockedAnswer = assessment.IsUserPromptBlocked
+                ? "I can't help with that request."
+                : "I can't safely use the assembled request to answer this question.";
+            var blockedCount = await SaveTurnAsync(blockedAnswer);
+            logger.LogWarning(
+                "Blocked request. UserJailbreak={UserJailbreak}, UserInjection={UserInjection}, Policy={Policy}, FinalJailbreak={FinalJailbreak}, FinalInjection={FinalInjection}",
+                assessment.UserJailbreakProbability,
+                assessment.UserPromptInjectionProbability,
+                assessment.PolicyViolationProbability,
+                assessment.JailbreakProbability,
+                assessment.PromptInjectionProbability);
+
+            return new AskResponse
+            {
+                ConversationId = activeConversationId,
+                ConversationCount = blockedCount,
+                Question = question,
+                Answer = blockedAnswer,
+                IsBlocked = true,
+                BlockReason = assessment.BlockReason,
+                TookMs = sw.ElapsedMilliseconds
+            };
         }
     }
 }
