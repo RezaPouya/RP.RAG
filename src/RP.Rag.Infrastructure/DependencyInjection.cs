@@ -106,6 +106,7 @@ public static class DependencyInjection
         services.AddSingleton<CategoryTokenIndexCache>();
         services.AddScoped<CategoryTokenIndexBuilder>();
         services.AddHostedService<CategoryTokenIndexWarmupService>();
+        services.AddHostedService<ConversationDistillationWorker>();
 
         // Ollama
         services.AddOptions<OllamaOptions>()
