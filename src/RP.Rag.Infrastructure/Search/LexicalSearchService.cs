@@ -234,7 +234,10 @@ public sealed class LexicalSearchService(
             .Select(t => FieldValue.String(t))
             .ToArray();
 
-        var outerMinimumShouldMatch = queryTerms.Length > 1 ? 2 : 1;
+        // A product search should retain recall for short, typo-prone natural-language
+        // requests (for example, "reliable enginneer laptop"). Relevance is refined
+        // downstream by hybrid ranking and the chunk relevance evaluator.
+        const int outerMinimumShouldMatch = 1;
 
         return q.Bool(b =>
         {

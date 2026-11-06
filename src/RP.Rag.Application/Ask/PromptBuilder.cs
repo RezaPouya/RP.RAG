@@ -36,11 +36,8 @@ public sealed class PromptBuilder
         return reader.ReadToEnd().Trim();
     }
 
-    public string BuildUserPrompt(
-        string question,
-        IReadOnlyList<ProductCard> products,
-        IReadOnlyList<ChunkHit> chunks,
-        ConversationMemory? conversationMemory = null)
+    public string BuildUserPrompt(string question, IReadOnlyList<ProductCard> products,
+        IReadOnlyList<ChunkHit> chunks, ConversationMemory? conversationMemory = null)
     {
         var sb = new StringBuilder();
 

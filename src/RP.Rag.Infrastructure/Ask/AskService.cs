@@ -8,16 +8,10 @@ using System.Text.RegularExpressions;
 
 namespace RP.RAG.Infrastructure.Ask;
 
-public sealed class AskService(
-    IHybridSearch hybrid,
-    IProductCatalogService catalog,
-    IAnswerGeneratorResolver generatorResolver,
-    IChunkRelevanceEvaluator chunkRelevanceEvaluator,
-    IFinalPromptGuardrail finalPromptGuardrail,
-    IConversationMemoryService conversationMemory,
-    PromptBuilder prompts,
-    IOptions<AskOptions> options,
-    ILogger<AskService> logger) : IAskService
+public sealed class AskService(IHybridSearch hybrid,
+    IProductCatalogService catalogSrvice, IAnswerGeneratorResolver generatorResolver,
+    IChunkRelevanceEvaluator chunkRelevanceEvaluator, IConversationMemoryService conversationMemory,
+    PromptBuilder prompts, IOptions<AskOptions> options, ILogger<AskService> logger) : IAskService
 {
     private static readonly Regex UrlPattern = new(@"(https?://|www\.)\S+", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -57,7 +51,7 @@ public sealed class AskService(
             onlyActive: true,
             ct);
 
-        var cards = await catalog.GetCardsAsync(retrieval.ProductIds, onlyActive: true, ct);
+        var cards = await catalogSrvice.GetCardsAsync(retrieval.ProductIds, onlyActive: true, ct);
 
         var products = retrieval.ProductIds
             .Where(cards.ContainsKey)
@@ -67,12 +61,9 @@ public sealed class AskService(
         if (products.Count == 0)
         {
             var emptyPrompt = prompts.BuildUserPrompt(question, [], [], memory);
-            var policyAssessment = await finalPromptGuardrail.EvaluateAsync(
-                prompts.SystemPrompt, emptyPrompt, ct, question);
-            if (!policyAssessment.IsAllowed)
-                return await BlockAsync(policyAssessment);
 
             var noResultsCount = await SaveTurnAsync(opts.NoResultsAnswer);
+
             return new AskResponse
             {
                 ConversationId = activeConversationId,
@@ -107,11 +98,6 @@ public sealed class AskService(
             injectionFlaggedCount);
 
         var userPrompt = prompts.BuildUserPrompt(question, products, chunks, memory);
-
-        var finalAssessment = await finalPromptGuardrail.EvaluateAsync(
-            prompts.SystemPrompt, userPrompt, ct, question);
-        if (!finalAssessment.IsAllowed)
-            return await BlockAsync(finalAssessment);
 
         IAnswerGenerator generator = generatorResolver.Resolve();
 
@@ -158,30 +144,6 @@ public sealed class AskService(
             return count;
         }
 
-        async Task<AskResponse> BlockAsync(FinalPromptGuardrailResult assessment)
-        {
-            var blockedAnswer = assessment.IsUserPromptBlocked
-                ? "I can't help with that request."
-                : "I can't safely use the assembled request to answer this question.";
-            var blockedCount = await SaveTurnAsync(blockedAnswer);
-            logger.LogWarning(
-                "Blocked request. UserJailbreak={UserJailbreak}, UserInjection={UserInjection}, Policy={Policy}, FinalJailbreak={FinalJailbreak}, FinalInjection={FinalInjection}",
-                assessment.UserJailbreakProbability,
-                assessment.UserPromptInjectionProbability,
-                assessment.PolicyViolationProbability,
-                assessment.JailbreakProbability,
-                assessment.PromptInjectionProbability);
 
-            return new AskResponse
-            {
-                ConversationId = activeConversationId,
-                ConversationCount = blockedCount,
-                Question = question,
-                Answer = blockedAnswer,
-                IsBlocked = true,
-                BlockReason = assessment.BlockReason,
-                TookMs = sw.ElapsedMilliseconds
-            };
-        }
     }
 }

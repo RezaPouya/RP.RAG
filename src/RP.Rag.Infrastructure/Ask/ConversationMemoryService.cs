@@ -2,18 +2,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RP.Rag.Domain.Entities;
+using RP.Rag.Infrastructure.Data;
+using RP.RAG.Application.Ask;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using RP.RAG.Application.Ask;
-using RP.Rag.Infrastructure.Data;
-using RP.Rag.Domain.Entities;
 
 namespace RP.RAG.Infrastructure.Ask;
 
 public sealed class ConversationMemoryService(
     IDbContextFactory<RpRagDbContext> dbFactory,
     IAnswerGeneratorResolver generatorResolver,
-    IFinalPromptGuardrail finalPromptGuardrail,
     IOptions<ConversationOptions> options,
     ILogger<ConversationMemoryService> logger) : IConversationMemoryService
 {
@@ -169,17 +168,6 @@ public sealed class ConversationMemoryService(
             var oldFacts = ReadJson<SemanticMemoryItem>(conversation.SemanticMemoryJson);
             var oldEpisodes = ReadJson<EpisodicMemoryItem>(conversation.EpisodicMemoryJson);
             var distillationPrompt = BuildDistillationPrompt(oldFacts, oldEpisodes, messages);
-            var assessment = await finalPromptGuardrail.EvaluateAsync(
-                DistillationSystemPrompt,
-                distillationPrompt,
-                cancellationToken);
-            if (!assessment.IsAllowed)
-            {
-                logger.LogWarning(
-                    "Skipped conversation memory distillation for {ConversationId}: untrusted history was flagged",
-                    conversationId);
-                return;
-            }
 
             var raw = await generatorResolver.Resolve().GenerateAsync(
                 DistillationSystemPrompt,

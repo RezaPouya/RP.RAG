@@ -83,7 +83,6 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IChunkRelevanceEvaluator, LayaChunkRelevanceEvaluator>();
-        services.AddScoped<IFinalPromptGuardrail, LayaFinalPromptGuardrail>();
 
         services.AddSingleton<CategoryTokenIndexCache>();
         services.AddScoped<CategoryTokenIndexBuilder>();

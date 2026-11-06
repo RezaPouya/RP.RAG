@@ -19,6 +19,7 @@ public sealed class AskController(
         {
             var response = await ask.AskAsync(
                 request.Question, request.TopK, request.ConversationId, ct);
+
             return response.IsBlocked
                 ? StatusCode(StatusCodes.Status403Forbidden, response)
                 : Ok(response);
