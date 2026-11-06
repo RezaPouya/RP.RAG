@@ -1,4 +1,4 @@
-namespace RP.RAG.Infrastructure.Ask;
+namespace RP.Rag.Infrastructure.Layas;
 
 public sealed class LayaOptions
 {

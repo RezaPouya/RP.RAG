@@ -1,4 +1,4 @@
-﻿namespace RP.RAG.Infrastructure.Embeddings;
+﻿namespace RP.Rag.Infrastructure.DeepSeeks;
 
 public sealed class DeepSeekOptions
 {

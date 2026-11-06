@@ -1,7 +1,9 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RP.Rag.Application.Ask.Models;
 using RP.Rag.Application.Conversations;
 using RP.Rag.Application.Conversations.Models;
+using RP.Rag.Application.Guardrails;
 using RP.RAG.Application.Ask;
 using RP.RAG.Application.Catalog;
 using RP.RAG.Application.Search;
@@ -10,10 +12,15 @@ using System.Text.RegularExpressions;
 
 namespace RP.RAG.Infrastructure.Ask;
 
-public sealed class AskService(IHybridSearch hybrid,
-    IProductCatalogService catalogSrvice, IAnswerGeneratorResolver generatorResolver,
-    IChunkRelevanceEvaluator chunkRelevanceEvaluator, IConversationMemoryService conversationMemory,
-    PromptBuilder prompts, IOptions<AskOptions> options, ILogger<AskService> logger) : IAskService
+public sealed class AskService(
+    IHybridSearch hybrid,
+    IProductCatalogService catalogService,
+    IAnswerGeneratorResolver generatorResolver,
+    IPromptGuardrail promptGuardrail, // Replaced IChunkRelevanceEvaluator
+    IConversationMemoryService conversationMemory,
+    PromptBuilder prompts,
+    IOptions<AskOptions> options,
+    ILogger<AskService> logger) : IAskService
 {
     private static readonly Regex UrlPattern = new(@"(https?://|www\.)\S+", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -27,9 +34,17 @@ public sealed class AskService(IHybridSearch hybrid,
         var sw = Stopwatch.StartNew();
 
         question = question.Trim();
-        if (question.Length > opts.MaxQuestionLength)
-            question = question[..opts.MaxQuestionLength];
+        if (string.IsNullOrWhiteSpace(question))
+        {
+            throw new ArgumentException("Question cannot be empty.", nameof(question));
+        }
 
+        if (question.Length > opts.MaxQuestionLength)
+        {
+            question = question[..opts.MaxQuestionLength];
+        }
+
+        // 1. Load or Create Conversation
         ConversationMemory memory;
         if (conversationId is null)
         {
@@ -41,11 +56,37 @@ public sealed class AskService(IHybridSearch hybrid,
             memory = await conversationMemory.GetMemoryAsync(conversationId.Value, ct)
                 ?? throw new KeyNotFoundException($"Conversation '{conversationId}' was not found.");
         }
+
         var activeConversationId = memory.ConversationId;
 
-        await conversationMemory.AddMessageAsync(
-            activeConversationId, ConversationMessageRole.User, question, ct);
+        // 2. Laya Check 1: Incoming Question ONLY (Fast & Single Call)
+        var guardrailResult = await promptGuardrail.EvaluateAsync(question, ct);
+        if (!guardrailResult.IsAllowed)
+        {
+            logger.LogWarning("Question blocked by Laya guardrail: {Reason}", guardrailResult.BlockReason);
 
+            // Save the blocked interaction to keep conversation history intact
+            await conversationMemory.AddMessageAsync(activeConversationId, ConversationMessageRole.User, question, ct);
+            var blockedCount = await conversationMemory.AddMessageAsync(activeConversationId, ConversationMessageRole.Assistant, "I cannot assist with that request.", ct);
+
+            return new AskResponse
+            {
+                ConversationId = activeConversationId,
+                ConversationCount = blockedCount,
+                Question = question,
+                Answer = "I cannot assist with that request.",
+                IsBlocked = true,
+                BlockReason = guardrailResult.BlockReason,
+                TookMs = sw.ElapsedMilliseconds,
+                Products = [],
+                Sources = []
+            };
+        }
+
+        // 3. Save User Message
+        await conversationMemory.AddMessageAsync(activeConversationId, ConversationMessageRole.User, question, ct);
+
+        // 4. Retrieve Catalog Context (Vector/Hybrid Search)
         var retrieval = await hybrid.RetrieveAsync(
             question,
             topProducts ?? opts.TopProducts,
@@ -53,18 +94,18 @@ public sealed class AskService(IHybridSearch hybrid,
             onlyActive: true,
             ct);
 
-        var cards = await catalogSrvice.GetCardsAsync(retrieval.ProductIds, onlyActive: true, ct);
+        var cards = await catalogService.GetCardsAsync(retrieval.ProductIds, onlyActive: true, ct);
 
         var products = retrieval.ProductIds
             .Where(cards.ContainsKey)
             .Select(id => cards[id])
             .ToList();
 
+        // 5. Handle No Results
         if (products.Count == 0)
         {
-            var emptyPrompt = prompts.BuildUserPrompt(question, [], [], memory);
-
-            var noResultsCount = await SaveTurnAsync(opts.NoResultsAnswer);
+            var noResultsCount = await conversationMemory.AddMessageAsync(
+                activeConversationId, ConversationMessageRole.Assistant, opts.NoResultsAnswer, ct);
 
             return new AskResponse
             {
@@ -72,47 +113,35 @@ public sealed class AskService(IHybridSearch hybrid,
                 ConversationCount = noResultsCount,
                 Question = question,
                 Answer = opts.NoResultsAnswer,
-                TookMs = sw.ElapsedMilliseconds
+                TookMs = sw.ElapsedMilliseconds,
+                Products = [],
+                Sources = []
             };
         }
 
+        // 6. Filter Chunks (No Laya chunk evaluation, just keep retrieved context)
         var productIds = products.Select(p => p.ProductId).ToHashSet();
-        var retrievedChunks = retrieval.Chunks.Where(c => productIds.Contains(c.ProductId)).ToList();
-        var relevanceResults = await chunkRelevanceEvaluator.EvaluateAsync(question, retrievedChunks, ct);
-        var relevanceByChunk = relevanceResults.ToDictionary(result => result.ChunkId);
-        var chunks = retrievedChunks
-            .Where(chunk => relevanceByChunk.TryGetValue(chunk.ChunkId, out var result) &&
-                (result.Relevance == ChunkRelevance.Relevant ||
-                    (opts.IncludePartiallyRelevantChunks && result.Relevance == ChunkRelevance.PartiallyRelevant)) &&
-                !result.ContainsPromptInjection)
+        var chunks = retrieval.Chunks
+            .Where(c => productIds.Contains(c.ProductId))
             .ToList();
 
-        var partiallyRelevantCount = relevanceResults.Count(result => result.Relevance == ChunkRelevance.PartiallyRelevant);
-        var irrelevantCount = relevanceResults.Count(result => result.Relevance == ChunkRelevance.Irrelevant);
-        var injectionFlaggedCount = relevanceResults.Count(result => result.ContainsPromptInjection);
-
-        logger.LogInformation(
-            "Stage 2 retained {KeptChunks} of {RetrievedChunks} chunks; partial={PartialChunks}, irrelevant={IrrelevantChunks}, injection={InjectionChunks}",
-            chunks.Count,
-            retrievedChunks.Count,
-            partiallyRelevantCount,
-            irrelevantCount,
-            injectionFlaggedCount);
-
+        // 7. Build Prompt (Uses the new 4-phase PromptBuilder)
         var userPrompt = prompts.BuildUserPrompt(question, products, chunks, memory);
 
+        // 8. Generate Answer
         IAnswerGenerator generator = generatorResolver.Resolve();
-
         var raw = await generator.GenerateAsync(prompts.SystemPrompt, userPrompt, ct);
-
         var answer = UrlPattern.Replace(raw, "").Trim();
-        var conversationCount = await SaveTurnAsync(answer);
+
+        // 9. Save Assistant Message (NO synchronous distillation)
+        var conversationCount = await conversationMemory.AddMessageAsync(
+            activeConversationId, ConversationMessageRole.Assistant, answer, ct);
+
+        sw.Stop();
 
         var refByProduct = products
             .Select((p, i) => (p.ProductId, Ref: i + 1))
             .ToDictionary(x => x.ProductId, x => x.Ref);
-
-        sw.Stop();
 
         logger.LogInformation(
             "Ask '{Question}': {Products} products, {Chunks} chunks, {Ms}ms, model={Model}",
@@ -137,15 +166,5 @@ public sealed class AskService(IHybridSearch hybrid,
                 })
                 .ToList()
         };
-
-        async Task<int> SaveTurnAsync(string answerText)
-        {
-            var count = await conversationMemory.AddMessageAsync(
-                activeConversationId, ConversationMessageRole.Assistant, answerText, ct);
-            await conversationMemory.DistillIfNeededAsync(activeConversationId, ct);
-            return count;
-        }
-
-
     }
 }

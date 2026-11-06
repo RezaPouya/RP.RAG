@@ -3,8 +3,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 using RP.Rag.Application.Guardrails;
+using RP.RAG.Infrastructure;
 
-namespace RP.RAG.Infrastructure.Ask;
+namespace RP.Rag.Infrastructure.Layas;
 
 /// <summary>
 /// Calls Laya's typed decision endpoint and applies RP.RAG's input policy.

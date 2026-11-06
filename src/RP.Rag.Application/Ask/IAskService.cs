@@ -1,3 +1,5 @@
+using RP.Rag.Application.Ask.Models;
+
 namespace RP.RAG.Application.Ask;
 
 public interface IAskService

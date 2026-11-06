@@ -2,8 +2,12 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using RP.Rag.Application.Conversations.Models;
+using RP.Rag.Application.Conversations;
+using RP.Rag.Infrastructure.Conversations;
 using RP.Rag.Infrastructure.Data;
+using RP.Rag.Infrastructure.DeepSeeks;
+using RP.Rag.Infrastructure.Layas;
+using RP.Rag.Infrastructure.Ollama;
 using RP.Rag.Infrastructure.Search;
 using RP.Rag.Infrastructure.SeedData;
 using RP.RAG.Application.Ask;

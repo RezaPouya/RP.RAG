@@ -1,16 +1,24 @@
-﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 using RP.RAG.Application.Ask;
+using RP.RAG.Infrastructure;
 using RP.RAG.Infrastructure.Embeddings;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 
-namespace RP.RAG.Infrastructure.Ask;
+namespace RP.Rag.Infrastructure.Ollama;
 
-public sealed class DeepSeekAnswerGenerator(IHttpClientFactory httpFactory, IOptions<DeepSeekOptions> options) : IAnswerGenerator
+public sealed class OllamaAnswerGenerator : IAnswerGenerator
 {
-    private readonly HttpClient _http = httpFactory.CreateClient("DeepSeek");
-    private readonly DeepSeekOptions _options = options.Value;
+    private readonly HttpClient _http;
+    private readonly OllamaOptions _options;
+
     public string ModelName => _options.GenerationModel;
+
+    public OllamaAnswerGenerator(IHttpClientFactory httpFactory, IOptions<OllamaOptions> options)
+    {
+        _http = httpFactory.CreateClient(ServiceKeys.Ollama);
+        _options = options.Value;
+    }
 
     public async Task<string> GenerateAsync(
         string systemPrompt,
@@ -21,6 +29,7 @@ public sealed class DeepSeekAnswerGenerator(IHttpClientFactory httpFactory, IOpt
         {
             Model = _options.GenerationModel,
             Stream = false,
+            Options = new ChatOptions { Temperature = _options.Temperature },
             Messages =
             [
                 new ChatMessage { Role = "system", Content = systemPrompt },
@@ -28,22 +37,22 @@ public sealed class DeepSeekAnswerGenerator(IHttpClientFactory httpFactory, IOpt
             ]
         };
 
-        using var response = await _http.PostAsJsonAsync("chat/completions", request, ct);
+        using var response = await _http.PostAsJsonAsync("/api/chat", request, ct);
 
         if (!response.IsSuccessStatusCode)
         {
             var body = await response.Content.ReadAsStringAsync(ct);
             throw new HttpRequestException(
-                $"DeepSeek returned {(int)response.StatusCode}: {body}",
+                $"Ollama returned {(int)response.StatusCode}: {body}",
                 inner: null,
                 statusCode: response.StatusCode);
         }
 
         var result = await response.Content.ReadFromJsonAsync<ChatResponse>(ct);
-        var content = result?.Choices?.FirstOrDefault()?.Message?.Content;
+        var content = result?.Message?.Content;
 
         if (string.IsNullOrWhiteSpace(content))
-            throw new InvalidOperationException("DeepSeek returned an empty answer.");
+            throw new InvalidOperationException("Ollama returned an empty answer.");
 
         return content.Trim();
     }
@@ -53,6 +62,7 @@ public sealed class DeepSeekAnswerGenerator(IHttpClientFactory httpFactory, IOpt
         [JsonPropertyName("model")] public string Model { get; set; } = "";
         [JsonPropertyName("stream")] public bool Stream { get; set; }
         [JsonPropertyName("messages")] public List<ChatMessage> Messages { get; set; } = new();
+        [JsonPropertyName("options")] public ChatOptions? Options { get; set; }
     }
 
     private sealed class ChatMessage
@@ -61,12 +71,12 @@ public sealed class DeepSeekAnswerGenerator(IHttpClientFactory httpFactory, IOpt
         [JsonPropertyName("content")] public string Content { get; set; } = "";
     }
 
-    private sealed class ChatResponse
+    private sealed class ChatOptions
     {
-        [JsonPropertyName("choices")] public List<Choice>? Choices { get; set; }
+        [JsonPropertyName("temperature")] public double Temperature { get; set; }
     }
 
-    private sealed class Choice
+    private sealed class ChatResponse
     {
         [JsonPropertyName("message")] public ChatMessage? Message { get; set; }
     }

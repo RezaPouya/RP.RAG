@@ -2,14 +2,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RP.Rag.Application.Conversations;
 using RP.Rag.Application.Conversations.Models;
 using RP.Rag.Domain.Entities;
 using RP.Rag.Infrastructure.Data;
 using RP.RAG.Application.Ask;
+using RP.RAG.Infrastructure.Ask;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace RP.RAG.Infrastructure.Ask;
+namespace RP.Rag.Infrastructure.Conversations;
 
 public sealed class ConversationMemoryService(
     IDbContextFactory<RpRagDbContext> dbFactory,

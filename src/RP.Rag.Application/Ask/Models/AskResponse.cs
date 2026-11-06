@@ -1,6 +1,6 @@
 using RP.RAG.Application.Catalog;
 
-namespace RP.RAG.Application.Ask;
+namespace RP.Rag.Application.Ask.Models;
 
 public sealed class AskResponse
 {
@@ -17,12 +17,4 @@ public sealed class AskResponse
     public IReadOnlyList<ProductCard> Products { get; init; } = [];
 
     public IReadOnlyList<AskSource> Sources { get; init; } = [];
-}
-
-public sealed class AskSource
-{
-    public int ProductRef { get; init; }
-    public int ProductId { get; init; }
-    public string ChunkType { get; init; } = "";
-    public string? Header { get; init; }
 }
