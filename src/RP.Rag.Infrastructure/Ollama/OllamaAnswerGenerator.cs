@@ -37,6 +37,7 @@ public sealed class OllamaAnswerGenerator : IAnswerGenerator
             ]
         };
 
+        _http.Timeout = TimeSpan.FromMinutes(10);
         using var response = await _http.PostAsJsonAsync("/api/chat", request, ct);
 
         if (!response.IsSuccessStatusCode)

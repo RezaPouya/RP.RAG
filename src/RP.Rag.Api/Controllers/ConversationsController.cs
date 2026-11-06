@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using RP.Rag.Application.Conversations.Models;
+using RP.Rag.Application.Conversations;
 using RP.RAG.Application.Ask;
 
 namespace RP.RAG.Api.Controllers;

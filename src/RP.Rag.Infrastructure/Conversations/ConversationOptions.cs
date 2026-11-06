@@ -1,4 +1,3 @@
-namespace RP.RAG.Infrastructure.Ask;
 
 public sealed class ConversationOptions
 {
