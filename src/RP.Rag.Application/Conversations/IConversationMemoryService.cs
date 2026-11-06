@@ -24,5 +24,5 @@ public interface IConversationMemoryService
         CancellationToken cancellationToken = default);
 
 
-    //Task DistillIfNeededAsync(Guid conversationId, CancellationToken cancellationToken = default);
+    Task DistillIfNeededAsync(Guid conversationId, CancellationToken cancellationToken = default);
 }

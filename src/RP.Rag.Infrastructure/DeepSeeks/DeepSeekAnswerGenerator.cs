@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
-using RP.Rag.Infrastructure.DeepSeeks;
 using RP.RAG.Application.Ask;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 
-namespace RP.RAG.Infrastructure.Ask;
+namespace RP.Rag.Infrastructure.DeepSeeks;
 
 public sealed class DeepSeekAnswerGenerator(IHttpClientFactory httpFactory, IOptions<DeepSeekOptions> options) : IAnswerGenerator
 {

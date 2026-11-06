@@ -4,6 +4,7 @@ using RP.Rag.Application.Ask.Models;
 using RP.Rag.Application.Conversations;
 using RP.Rag.Application.Conversations.Models;
 using RP.Rag.Application.Guardrails;
+using RP.Rag.Infrastructure.Ask;
 using RP.RAG.Application.Ask;
 using RP.RAG.Application.Catalog;
 using RP.RAG.Application.Search;

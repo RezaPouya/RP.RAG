@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RP.Rag.Application.Conversations;
 using RP.Rag.Application.Guardrails;
+using RP.Rag.Infrastructure.Ask;
 using RP.Rag.Infrastructure.Conversations;
 using RP.Rag.Infrastructure.Data;
 using RP.Rag.Infrastructure.DeepSeeks;
