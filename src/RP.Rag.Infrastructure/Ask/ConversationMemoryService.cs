@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RP.Rag.Application.Conversations.Models;
 using RP.Rag.Domain.Entities;
 using RP.Rag.Infrastructure.Data;
 using RP.RAG.Application.Ask;

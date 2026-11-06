@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RP.Rag.Application.Conversations;
+using RP.Rag.Application.Conversations.Models;
 using RP.RAG.Application.Ask;
 using RP.RAG.Application.Catalog;
 using RP.RAG.Application.Search;

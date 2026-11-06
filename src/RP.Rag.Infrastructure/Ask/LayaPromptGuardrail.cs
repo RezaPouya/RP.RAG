@@ -2,7 +2,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
-using RP.RAG.Application.Ask;
+using RP.Rag.Application.Guardrails;
 
 namespace RP.RAG.Infrastructure.Ask;
 

@@ -1,3 +1,4 @@
+using RP.Rag.Application.Conversations.Models;
 using RP.RAG.Application.Catalog;
 using RP.RAG.Application.Search.Models;
 using System.Globalization;
