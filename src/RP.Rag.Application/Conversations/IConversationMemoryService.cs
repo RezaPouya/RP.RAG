@@ -4,8 +4,10 @@ namespace RP.Rag.Application.Conversations;
 
 public interface IConversationMemoryService
 {
-    Task<ConversationDetails> CreateAsync(CancellationToken cancellationToken = default);
-    Task<ConversationDetails?> GetAsync(Guid conversationId, CancellationToken cancellationToken = default);
+    Task<ConversationDetails> CreateAsync(string userId, CancellationToken cancellationToken = default);
+    Task<ConversationDetails?> GetAsync(string userId, Guid conversationId, CancellationToken cancellationToken = default);
+
+
     Task<bool> DeleteAsync(Guid conversationId, CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -25,4 +27,6 @@ public interface IConversationMemoryService
 
 
     Task DistillIfNeededAsync(Guid conversationId, CancellationToken cancellationToken = default);
+
+
 }

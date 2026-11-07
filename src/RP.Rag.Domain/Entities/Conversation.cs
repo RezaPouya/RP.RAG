@@ -3,6 +3,7 @@ namespace RP.Rag.Domain.Entities;
 public sealed class Conversation
 {
     public Guid Id { get; set; }
+    public string UserId { get; set; } = string.Empty; // <-- اضافه شد
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public int MessageCount { get; set; }

@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RP.Rag.Application.Conversations;
 using RP.RAG.Application.Ask;
+using System.Security.Claims;
 
 namespace RP.RAG.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/conversations")]
 public sealed class ConversationsController(
@@ -11,17 +14,22 @@ public sealed class ConversationsController(
     IAskService ask,
     ILogger<ConversationsController> logger) : ControllerBase
 {
+
+    private string GetUserId() => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
     [HttpPost]
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
     {
-        var conversation = await conversations.CreateAsync(cancellationToken);
+        var userId = GetUserId();
+        var conversation = await conversations.CreateAsync(userId, cancellationToken);
         return CreatedAtAction(nameof(Get), new { conversationId = conversation.ConversationId }, conversation);
     }
 
     [HttpGet("{conversationId:guid}")]
     public async Task<IActionResult> Get(Guid conversationId, CancellationToken cancellationToken)
     {
-        var conversation = await conversations.GetAsync(conversationId, cancellationToken);
+        var userId = GetUserId();
+        var conversation = await conversations.GetAsync(userId, conversationId, cancellationToken);
         return conversation is null ? NotFound() : Ok(conversation);
     }
 

@@ -10,11 +10,13 @@ internal sealed class ConversationDbConfiguration : IEntityTypeConfiguration<Con
     {
         entity.ToTable("Conversations");
         entity.HasKey(x => x.Id);
+        entity.Property(x => x.UserId).HasMaxLength(100).IsRequired();
         entity.Property(x => x.DistilledMemory).HasColumnType("text");
         entity.Property(x => x.SemanticMemoryJson).HasColumnType("jsonb");
         entity.Property(x => x.EpisodicMemoryJson).HasColumnType("jsonb");
         entity.Property(x => x.MessageCount).IsRequired();
         entity.Property(x => x.DistilledThroughSequence).IsRequired();
+        entity.HasIndex(x => x.UserId); // برای سرعت بیشتر در لیست کردن گفتگوهای کاربر
     }
 }
 

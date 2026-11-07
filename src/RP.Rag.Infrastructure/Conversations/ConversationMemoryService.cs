@@ -35,23 +35,35 @@ public sealed class ConversationMemoryService(
 
     private readonly ConversationOptions _options = options.Value;
 
-    public async Task<ConversationDetails> CreateAsync(CancellationToken cancellationToken = default)
+    public async Task<ConversationDetails> CreateAsync(string userId, CancellationToken cancellationToken = default)
     {
         await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
         var now = DateTime.UtcNow;
-        var conversation = new Conversation { Id = Guid.NewGuid(), CreatedAt = now, UpdatedAt = now };
+
+        var conversation = new Conversation
+        {
+            Id = Guid.NewGuid(),
+            UserId = userId,
+            CreatedAt = now,
+            UpdatedAt = now
+        };
+
         db.Conversations.Add(conversation);
         await db.SaveChangesAsync(cancellationToken);
         return ToDetails(conversation, []);
     }
 
-    public async Task<ConversationDetails?> GetAsync(
-        Guid conversationId,
+    public async Task<ConversationDetails?> GetAsync(string userId, Guid conversationId,
         CancellationToken cancellationToken = default)
     {
         await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
+
         var conversation = await db.Conversations.AsNoTracking()
-            .SingleOrDefaultAsync(x => x.Id == conversationId, cancellationToken);
+            .SingleOrDefaultAsync(x =>
+                x.Id == conversationId &&
+                x.UserId == userId,
+                cancellationToken);
+
         if (conversation is null)
             return null;
 
@@ -74,13 +86,14 @@ public sealed class ConversationMemoryService(
             .ExecuteDeleteAsync(cancellationToken) > 0;
     }
 
-    public async Task<ConversationMemory?> GetMemoryAsync(
-        Guid conversationId,
+    public async Task<ConversationMemory?> GetMemoryAsync(Guid conversationId,
         CancellationToken cancellationToken = default)
     {
         await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
+
         var conversation = await db.Conversations.AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == conversationId, cancellationToken);
+
         if (conversation is null)
             return null;
 
