@@ -39,19 +39,26 @@ namespace RP.Rag.Infrastructure.Data.Migrations
                     b.Property<int>("DistilledThroughSequence")
                         .HasColumnType("integer");
 
+                    b.Property<string>("EpisodicMemoryJson")
+                        .HasColumnType("jsonb");
+
                     b.Property<int>("MessageCount")
                         .HasColumnType("integer");
 
                     b.Property<string>("SemanticMemoryJson")
                         .HasColumnType("jsonb");
 
-                    b.Property<string>("EpisodicMemoryJson")
-                        .HasColumnType("jsonb");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Conversations", (string)null);
                 });
