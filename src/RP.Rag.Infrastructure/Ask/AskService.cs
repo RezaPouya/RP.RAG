@@ -17,7 +17,7 @@ public sealed class AskService(
     IHybridSearch hybrid,
     IProductCatalogService catalogService,
     IAnswerGeneratorResolver generatorResolver,
-    IPromptGuardrail promptGuardrail, // Replaced IChunkRelevanceEvaluator
+    IPromptGuardrail promptGuardrail,
     IConversationMemoryService conversationMemory,
     PromptBuilder prompts,
     IOptions<AskOptions> options,
@@ -26,6 +26,7 @@ public sealed class AskService(
     private static readonly Regex UrlPattern = new(@"(https?://|www\.)\S+", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     public async Task<AskResponse> AskAsync(
+        string userId,
         string question,
         int? topProducts = null,
         Guid? conversationId = null,
@@ -35,6 +36,7 @@ public sealed class AskService(
         var sw = Stopwatch.StartNew();
 
         question = question.Trim();
+
         if (string.IsNullOrWhiteSpace(question))
         {
             throw new ArgumentException("Question cannot be empty.", nameof(question));
@@ -45,28 +47,30 @@ public sealed class AskService(
             question = question[..opts.MaxQuestionLength];
         }
 
-        // 1. Load or Create Conversation
         ConversationMemory memory;
+
         if (conversationId is null)
         {
-            var created = await conversationMemory.CreateAsync(ct);
+            var created = await conversationMemory.CreateAsync(userId, ct);
             memory = new ConversationMemory(created.ConversationId, created.MessageCount, created.DistilledMemory, []);
         }
         else
         {
+            var conversation = await conversationMemory.GetAsync(userId, conversationId.Value, ct)
+                ?? throw new KeyNotFoundException($"Conversation '{conversationId}' was not found.");
+
             memory = await conversationMemory.GetMemoryAsync(conversationId.Value, ct)
                 ?? throw new KeyNotFoundException($"Conversation '{conversationId}' was not found.");
         }
 
         var activeConversationId = memory.ConversationId;
 
-        // 2. Laya Check 1: Incoming Question ONLY (Fast & Single Call)
         var guardrailResult = await promptGuardrail.EvaluateAsync(question, ct);
+
         if (!guardrailResult.IsAllowed)
         {
             logger.LogWarning("Question blocked by Laya guardrail: {Reason}", guardrailResult.BlockReason);
 
-            // Save the blocked interaction to keep conversation history intact
             await conversationMemory.AddMessageAsync(activeConversationId, ConversationMessageRole.User, question, ct);
             var blockedCount = await conversationMemory.AddMessageAsync(activeConversationId, ConversationMessageRole.Assistant, "I cannot assist with that request.", ct);
 
@@ -84,10 +88,8 @@ public sealed class AskService(
             };
         }
 
-        // 3. Save User Message
         await conversationMemory.AddMessageAsync(activeConversationId, ConversationMessageRole.User, question, ct);
 
-        // 4. Retrieve Catalog Context (Vector/Hybrid Search)
         var retrieval = await hybrid.RetrieveAsync(
             question,
             topProducts ?? opts.TopProducts,
@@ -102,7 +104,6 @@ public sealed class AskService(
             .Select(id => cards[id])
             .ToList();
 
-        // 5. Handle No Results
         if (products.Count == 0)
         {
             var noResultsCount = await conversationMemory.AddMessageAsync(
@@ -120,21 +121,17 @@ public sealed class AskService(
             };
         }
 
-        // 6. Filter Chunks (No Laya chunk evaluation, just keep retrieved context)
         var productIds = products.Select(p => p.ProductId).ToHashSet();
         var chunks = retrieval.Chunks
             .Where(c => productIds.Contains(c.ProductId))
             .ToList();
 
-        // 7. Build Prompt (Uses the new 4-phase PromptBuilder)
         var userPrompt = prompts.BuildUserPrompt(question, products, chunks, memory);
 
-        // 8. Generate Answer
         IAnswerGenerator generator = generatorResolver.Resolve();
         var raw = await generator.GenerateAsync(prompts.SystemPrompt, userPrompt, ct);
         var answer = UrlPattern.Replace(raw, "").Trim();
 
-        // 9. Save Assistant Message (NO synchronous distillation)
         var conversationCount = await conversationMemory.AddMessageAsync(
             activeConversationId, ConversationMessageRole.Assistant, answer, ct);
 

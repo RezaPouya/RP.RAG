@@ -5,6 +5,7 @@ namespace RP.RAG.Application.Ask;
 public interface IAskService
 {
     Task<AskResponse> AskAsync(
+        string userId,
         string question,
         int? topProducts = null,
         Guid? conversationId = null,

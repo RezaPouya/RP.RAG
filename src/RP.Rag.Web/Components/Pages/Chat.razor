@@ -1,0 +1,107 @@
+﻿@page "/chat/{ConversationId:guid}"
+@using RP.RAG.Application.Ask
+@attribute [Authorize]
+@inject IAskService AskService
+@inject RP.Rag.Application.Conversations.IConversationMemoryService ConversationService
+
+<div class="d-flex flex-column" style="height: calc(100vh - 150px);">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>چت با دستیار کاتالوگ</h3>
+        @if (lastResponseTimeMs > 0)
+        {
+            <span class="badge bg-info">زمان پاسخ: @lastResponseTimeMs ms</span>
+        }
+    </div>
+
+    <div class="flex-grow-1 overflow-auto border rounded p-3 mb-3" style="background-color: #f8f9fa;">
+        @foreach (var msg in messages)
+        {
+            <div class="mb-3 d-flex @(msg.Role == "user" ? "justify-content-start" : "justify-content-end")">
+                <div class="p-2 rounded shadow-sm" style="max-width: 70%; @(msg.Role == "user" ? "background-color: #d1e7dd;" : "background-color: #cfe2ff;")">
+                    <strong>@(msg.Role == "user" ? "شما" : "دستیار"):</strong>
+                    <p class="mb-0">@msg.Content</p>
+                    @if (!string.IsNullOrEmpty(msg.ElapsedTimeMs))
+                    {
+                        <small class="text-muted">@msg.ElapsedTimeMs ms</small>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="سوال خود را بپرسید..." @bind="newMessage" @onkeydown="HandleKeyDown" />
+        <button class="btn btn-primary" @onclick="SendMessage" disabled="@isSending">
+            @if (isSending)
+            {
+                <span class="spinner-border spinner-border-sm"></span>
+            }
+            ارسال
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Guid ConversationId { get; set; }
+    private List<ChatMessageDto> messages = new();
+    private string newMessage = "";
+    private bool isSending = false;
+    private long lastResponseTimeMs = 0;
+
+    private sealed class ChatMessageDto
+    {
+        public string Role { get; set; } = "";
+        public string Content { get; set; } = "";
+        public string? ElapsedTimeMs { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var userId = GetUserId();
+        var conversation = await ConversationService.GetAsync(userId, ConversationId);
+        if (conversation is null)
+        {
+            return;
+        }
+
+        messages = conversation.Messages
+            .Select(m => new ChatMessageDto { Role = m.Role, Content = m.Content })
+            .ToList();
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await SendMessage();
+    }
+
+    private async Task SendMessage()
+    {
+        if (string.IsNullOrWhiteSpace(newMessage)) return;
+
+        isSending = true;
+        var question = newMessage;
+        newMessage = "";
+        messages.Add(new ChatMessageDto { Role = "user", Content = question });
+        StateHasChanged();
+
+        var userId = GetUserId();
+        var response = await AskService.AskAsync(userId, question, topProducts: 5, conversationId: ConversationId);
+
+        lastResponseTimeMs = response.TookMs;
+        messages.Add(new ChatMessageDto
+        {
+            Role = "assistant",
+            Content = response.Answer,
+            ElapsedTimeMs = response.TookMs.ToString()
+        });
+
+        isSending = false;
+        StateHasChanged();
+    }
+
+    private string GetUserId()
+    {
+        var httpContext = HttpContextAccessor.HttpContext;
+        return httpContext?.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "";
+    }
+}

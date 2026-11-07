@@ -1,0 +1,68 @@
+﻿@page "/login"
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="container mt-5" style="max-width: 400px;">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">ورود به سیستم</div>
+        <div class="card-body">
+            <EditForm Model="model" OnValidSubmit="HandleLogin">
+                <DataAnnotationsValidator />
+                <div class="mb-3">
+                    <label for="username" class="form-label">نام کاربری</label>
+                    <InputText id="username" class="form-control" @bind-Value="model.Username" />
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">رمز عبور</label>
+                    <InputText id="password" type="password" class="form-control" @bind-Value="model.Password" />
+                </div>
+                <button type="submit" class="btn btn-primary w-100" disabled="@isLoading">
+                    @if (isLoading)
+                    {
+                        <span class="spinner-border spinner-border-sm"></span>
+                    }
+                    ورود
+                </button>
+                @if (!string.IsNullOrEmpty(error))
+                {
+                    <div class="alert alert-danger mt-3">@error</div>
+                }
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    private LoginModel model = new();
+    private bool isLoading = false;
+    private string? error;
+
+    private async Task HandleLogin()
+    {
+        isLoading = true;
+        error = null;
+
+        var user = AuthService.Validate(model.Username, model.Password);
+        if (user is not null)
+        {
+            var httpContext = HttpContextAccessor.HttpContext;
+            if (httpContext is not null)
+            {
+                await AuthService.SignInAsync(user, httpContext);
+                Nav.NavigateTo("/", forceLoad: true);
+            }
+        }
+        else
+        {
+            error = "نام کاربری یا رمز عبور اشتباه است";
+        }
+
+        isLoading = false;
+    }
+
+    private sealed class LoginModel
+    {
+        public string Username { get; set; } = "";
+        public string Password { get; set; } = "";
+    }
+}

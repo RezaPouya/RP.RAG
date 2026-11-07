@@ -1,0 +1,59 @@
+﻿@page "/conversations"
+@attribute [Authorize]
+@inject RP.Rag.Application.Conversations.IConversationMemoryService ConversationService
+@inject NavigationManager Nav
+@inject AuthenticationStateProvider AuthProvider
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>گفتگوهای من</h2>
+    <button class="btn btn-success" @onclick="CreateNew">گفتگوی جدید</button>
+</div>
+
+@if (isLoading)
+{
+    <div class="text-center"><span class="spinner-border"></span></div>
+}
+else if (conversations.Count == 0)
+{
+    <div class="alert alert-warning">هنوز گفتگویی ندارید.</div>
+}
+else
+{
+    <div class="list-group">
+        @foreach (var conv in conversations)
+        {
+            <a href="/chat/@conv.ConversationId" class="list-group-item list-group-item-action">
+                <div class="d-flex justify-content-between">
+                    <h5 class="mb-1">گفتگو @conv.ConversationId.ToString()[..8]</h5>
+                    <small>@conv.UpdatedAt.ToString("yyyy/MM/dd HH:mm")</small>
+                </div>
+                <p class="mb-1">تعداد پیام: @conv.MessageCount</p>
+            </a>
+        }
+    </div>
+}
+
+@code {
+    private List<ConversationDetails> conversations = new();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var userId = GetUserId();
+        conversations = await ConversationService.GetByUserAsync(userId);
+        isLoading = false;
+    }
+
+    private async Task CreateNew()
+    {
+        var userId = GetUserId();
+        var conversation = await ConversationService.CreateAsync(userId);
+        Nav.NavigateTo($"/chat/{conversation.ConversationId}");
+    }
+
+    private string GetUserId()
+    {
+        var httpContext = HttpContextAccessor.HttpContext;
+        return httpContext?.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "";
+    }
+}

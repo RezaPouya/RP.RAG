@@ -6,27 +6,9 @@ public interface IConversationMemoryService
 {
     Task<ConversationDetails> CreateAsync(string userId, CancellationToken cancellationToken = default);
     Task<ConversationDetails?> GetAsync(string userId, Guid conversationId, CancellationToken cancellationToken = default);
-
-
-    Task<bool> DeleteAsync(Guid conversationId, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Loads the 4 phases of memory: Recent messages, Semantic facts, Episodic events.
-    /// (Procedural memory is handled by the PromptBuilder via embedded markdown files).
-    /// </summary>
+    Task<bool> DeleteAsync(string userId, Guid conversationId, CancellationToken cancellationToken = default);
+    Task<List<ConversationDetails>> GetByUserAsync(string userId, CancellationToken cancellationToken = default);
     Task<ConversationMemory?> GetMemoryAsync(Guid conversationId, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Appends a user or assistant message to the conversation.
-    /// </summary>
-    Task<int> AddMessageAsync(
-        Guid conversationId,
-        ConversationMessageRole role,
-        string content,
-        CancellationToken cancellationToken = default);
-
-
+    Task<int> AddMessageAsync(Guid conversationId, ConversationMessageRole role, string content, CancellationToken cancellationToken = default);
     Task DistillIfNeededAsync(Guid conversationId, CancellationToken cancellationToken = default);
-
-
 }

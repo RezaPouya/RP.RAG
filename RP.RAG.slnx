@@ -18,11 +18,11 @@
     <File Path="docker-compose.yml" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/RP.Rag.Api/RP.Rag.Api.csproj" Id="2089cc9f-45af-42a7-9218-eb9a1a51dcf8" />
     <Project Path="src/RP.Rag.Application/RP.Rag.Application.csproj" Id="712bb674-5a5b-4a79-9b23-858634fbca5a" />
     <Project Path="src/RP.Rag.Domain/RP.Rag.Domain.csproj" Id="91905e32-d9e2-4e66-bd18-df01c6a1ab46" />
     <Project Path="src/RP.Rag.Indexer/RP.Rag.Indexer.csproj" Id="0fe27b6f-f502-4c67-ae02-cd9372e65101" />
     <Project Path="src/RP.Rag.Infrastructure/RP.Rag.Infrastructure.csproj" Id="4909c678-7182-4383-85ee-605afbca2086" />
+    <Project Path="src/RP.Rag.Web/RP.Rag.Web.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/RP.Rag.Tests/RP.Rag.Tests.csproj" Id="21f7271d-0180-48b7-a765-cfbbf1a31065" />

@@ -1,0 +1,70 @@
+﻿@page "/"
+@attribute [Authorize]
+@inject RP.RAG.Application.Search.IHybridSearch HybridSearch
+
+<h2>جستجوی ترکیبی محصولات</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="عبارت جستجو..." @bind="query" />
+            <button class="btn btn-primary" @onclick="DoSearch" disabled="@isLoading">
+                @if (isLoading)
+                {
+                    <span class="spinner-border spinner-border-sm"></span>
+                }
+                جستجو
+            </button>
+        </div>
+    </div>
+</div>
+
+@if (searchResult is not null)
+{
+    <div class="alert alert-info">
+        زمان پاسخ: @searchResult.TookMs میلی‌ثانیه | تعداد نتایج: @searchResult.Total
+    </div>
+
+    <div class="row">
+        @foreach (var hit in searchResult.Hits)
+        {
+            <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@hit.Name</h5>
+                        <p class="card-text">@hit.Summary</p>
+                        <ul class="list-unstyled small">
+                            <li><strong>SKU:</strong> @hit.Sku</li>
+                            <li><strong>دسته:</strong> @hit.CategoryName</li>
+                            <li><strong>قیمت:</strong> @hit.Price.ToString("N0")</li>
+                            <li><strong>موجودی:</strong> @hit.StockCount</li>
+                        </ul>
+                        @if (!string.IsNullOrEmpty(hit.Highlight))
+                        {
+                            <div class="mt-2"><small class="text-muted">@hit.Highlight</small></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private string query = "";
+    private SearchResult? searchResult;
+    private bool isLoading = false;
+
+    private async Task DoSearch()
+    {
+        if (string.IsNullOrWhiteSpace(query)) return;
+
+        isLoading = true;
+        StateHasChanged();
+
+        searchResult = await HybridSearch.SearchAsync(query, topK: 10, onlyActive: true);
+
+        isLoading = false;
+        StateHasChanged();
+    }
+}
