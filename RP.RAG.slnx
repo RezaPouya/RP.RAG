@@ -17,6 +17,12 @@
   <Folder Name="/docker/">
     <File Path="docker-compose.yml" />
   </Folder>
+  <Folder Name="/rules/">
+    <File Path="Rules/guardrails.md" />
+    <File Path="Rules/procedures.md" />
+    <File Path="Rules/README.fa.md" />
+    <File Path="Rules/response-style.md" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/RP.Rag.Application/RP.Rag.Application.csproj" Id="712bb674-5a5b-4a79-9b23-858634fbca5a" />
     <Project Path="src/RP.Rag.Domain/RP.Rag.Domain.csproj" Id="91905e32-d9e2-4e66-bd18-df01c6a1ab46" />

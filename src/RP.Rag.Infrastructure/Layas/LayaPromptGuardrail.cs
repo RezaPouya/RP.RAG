@@ -1,9 +1,10 @@
-using System.Net.Http.Json;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RP.Rag.Application.Guardrails;
 using RP.RAG.Infrastructure;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace RP.Rag.Infrastructure.Layas;
 
@@ -15,15 +16,17 @@ public sealed class LayaPromptGuardrail : IPromptGuardrail
     private readonly HttpClient _http;
     private readonly LayaOptions _options;
 
-    public LayaPromptGuardrail(IHttpClientFactory httpFactory, IOptions<LayaOptions> options)
+    private readonly ILogger<LayaPromptGuardrail> _logger; // Add this
+
+
+    public LayaPromptGuardrail(IHttpClientFactory httpFactory, IOptions<LayaOptions> options, ILogger<LayaPromptGuardrail> logger)
     {
         _http = httpFactory.CreateClient(ServiceKeys.Laya);
         _options = options.Value;
+        _logger = logger;
     }
 
-    public async Task<PromptGuardrailResult> EvaluateAsync(
-        string prompt,
-        CancellationToken cancellationToken = default)
+    public async Task<PromptGuardrailResult> EvaluateAsync(string prompt, CancellationToken cancellationToken = default)
     {
         var request = new LayaRequest
         {
@@ -43,7 +46,8 @@ public sealed class LayaPromptGuardrail : IPromptGuardrail
                 ["out_of_scope"] = new()
                 {
                     Type = "noul",
-                    Instructions = "Does `prompt` primarily request information or an action unrelated to discovering, understanding, or comparing products in an online catalog? A general explanation that directly helps understand a product concept is in scope."
+                    // Added explicit instruction that product requests are IN SCOPE
+                    Instructions = "Does `prompt` primarily request information or an action unrelated to discovering, understanding, or comparing products in an online catalog? Note: Direct requests for products or categories (e.g., 'I want a gaming laptop', 'show me running shoes') are strictly IN SCOPE."
                 },
                 ["restricted_content"] = new()
                 {
@@ -91,6 +95,18 @@ public sealed class LayaPromptGuardrail : IPromptGuardrail
             : isRestrictedContent ? "Request conflicts with the assistant's content policy."
             : requestsExternalSource ? "Request asks for an external source."
             : null;
+
+        _logger.LogInformation(
+            "Laya Guardrail Eval - Query: '{Query}' | Jailbreak: {Jailbreak:F2} | Injection: {Injection:F2} | OutOfScope: {OutOfScope:F2} | Restricted: {Restricted:F2} | External: {External:F2} | Blocked: {IsBlocked} ({Reason})",
+            prompt,
+            jailbreakProbability,
+            promptInjectionProbability,
+            outOfScopeProbability,
+            restrictedContentProbability,
+            externalSourceProbability,
+            blockReason is not null,
+            blockReason ?? "Allowed");
+
 
         return new PromptGuardrailResult(
             IsAllowed: blockReason is null,

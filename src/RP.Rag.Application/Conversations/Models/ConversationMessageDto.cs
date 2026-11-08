@@ -4,4 +4,5 @@ public sealed record ConversationMessageDto(
     int Sequence,
     string Role,
     string Content,
-    DateTime CreatedAt);
+    DateTime CreatedAt,
+    IReadOnlyList<int>? ProductIds = null);

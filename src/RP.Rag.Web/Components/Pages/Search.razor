@@ -2,18 +2,18 @@
 @attribute [Authorize]
 @inject RP.RAG.Application.Search.IHybridSearch HybridSearch
 
-<h2>جستجوی ترکیبی محصولات</h2>
+<h2>Hybrid Product Search</h2>
 
 <div class="card mb-4">
     <div class="card-body">
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="عبارت جستجو..." @bind="query" />
+            <input type="text" class="form-control" placeholder="Search query..." @bind="query" />
             <button class="btn btn-primary" @onclick="DoSearch" disabled="@isLoading">
                 @if (isLoading)
                 {
                     <span class="spinner-border spinner-border-sm"></span>
                 }
-                جستجو
+                Search
             </button>
         </div>
     </div>
@@ -22,7 +22,7 @@
 @if (searchResult is not null)
 {
     <div class="alert alert-info">
-        زمان پاسخ: @searchResult.TookMs میلی‌ثانیه | تعداد نتایج: @searchResult.Total
+        Response Time: @searchResult.TookMs ms | Total Results: @searchResult.Total
     </div>
 
     <div class="row">
@@ -35,9 +35,9 @@
                         <p class="card-text">@hit.Summary</p>
                         <ul class="list-unstyled small">
                             <li><strong>SKU:</strong> @hit.Sku</li>
-                            <li><strong>دسته:</strong> @hit.CategoryName</li>
-                            <li><strong>قیمت:</strong> @hit.Price.ToString("N0")</li>
-                            <li><strong>موجودی:</strong> @hit.StockCount</li>
+                            <li><strong>Category:</strong> @hit.CategoryName</li>
+                            <li><strong>Price:</strong> @hit.Price.ToString("N0")</li>
+                            <li><strong>Stock:</strong> @hit.StockCount</li>
                         </ul>
                         @if (!string.IsNullOrEmpty(hit.Highlight))
                         {

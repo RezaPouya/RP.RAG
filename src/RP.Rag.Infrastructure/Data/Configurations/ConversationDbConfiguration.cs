@@ -19,19 +19,3 @@ internal sealed class ConversationDbConfiguration : IEntityTypeConfiguration<Con
         entity.HasIndex(x => x.UserId); // برای سرعت بیشتر در لیست کردن گفتگوهای کاربر
     }
 }
-
-internal sealed class ConversationMessageDbConfiguration : IEntityTypeConfiguration<ConversationMessage>
-{
-    public void Configure(EntityTypeBuilder<ConversationMessage> entity)
-    {
-        entity.ToTable("ConversationMessages");
-        entity.HasKey(x => x.Id);
-        entity.Property(x => x.Role).HasMaxLength(20).IsRequired();
-        entity.Property(x => x.Content).HasColumnType("text").IsRequired();
-        entity.HasIndex(x => new { x.ConversationId, x.Sequence }).IsUnique();
-        entity.HasOne(x => x.Conversation)
-            .WithMany(x => x.Messages)
-            .HasForeignKey(x => x.ConversationId)
-            .OnDelete(DeleteBehavior.Cascade);
-    }
-}

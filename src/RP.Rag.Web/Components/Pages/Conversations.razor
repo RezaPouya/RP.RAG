@@ -2,11 +2,11 @@
 @attribute [Authorize]
 @inject RP.Rag.Application.Conversations.IConversationMemoryService ConversationService
 @inject NavigationManager Nav
-@inject AuthenticationStateProvider AuthProvider
+@inject AuthenticationStateProvider AuthStateProvider
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>گفتگوهای من</h2>
-    <button class="btn btn-success" @onclick="CreateNew">گفتگوی جدید</button>
+    <h2>My Conversations</h2>
+    <button class="btn btn-success" @onclick="CreateNew">New Conversation</button>
 </div>
 
 @if (isLoading)
@@ -15,7 +15,7 @@
 }
 else if (conversations.Count == 0)
 {
-    <div class="alert alert-warning">هنوز گفتگویی ندارید.</div>
+    <div class="alert alert-warning">You don't have any conversations yet.</div>
 }
 else
 {
@@ -24,10 +24,10 @@ else
         {
             <a href="/chat/@conv.ConversationId" class="list-group-item list-group-item-action">
                 <div class="d-flex justify-content-between">
-                    <h5 class="mb-1">گفتگو @conv.ConversationId.ToString()[..8]</h5>
+                    <h5 class="mb-1">Conversation @conv.ConversationId.ToString()[..8]</h5>
                     <small>@conv.UpdatedAt.ToString("yyyy/MM/dd HH:mm")</small>
                 </div>
-                <p class="mb-1">تعداد پیام: @conv.MessageCount</p>
+                <p class="mb-1">Message Count: @conv.MessageCount</p>
             </a>
         }
     </div>
@@ -39,21 +39,21 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var userId = GetUserId();
+        var userId = await GetUserIdAsync();
         conversations = await ConversationService.GetByUserAsync(userId);
         isLoading = false;
     }
 
     private async Task CreateNew()
     {
-        var userId = GetUserId();
+        var userId = await GetUserIdAsync();
         var conversation = await ConversationService.CreateAsync(userId);
         Nav.NavigateTo($"/chat/{conversation.ConversationId}");
     }
 
-    private string GetUserId()
+    private async Task<string> GetUserIdAsync()
     {
-        var httpContext = HttpContextAccessor.HttpContext;
-        return httpContext?.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "";
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        return authState.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "";
     }
 }

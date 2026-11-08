@@ -65,14 +65,15 @@ public sealed class AskService(
 
         var activeConversationId = memory.ConversationId;
 
+        // 1. Laya Guardrail Check
         var guardrailResult = await promptGuardrail.EvaluateAsync(question, ct);
 
         if (!guardrailResult.IsAllowed)
         {
             logger.LogWarning("Question blocked by Laya guardrail: {Reason}", guardrailResult.BlockReason);
 
-            await conversationMemory.AddMessageAsync(activeConversationId, ConversationMessageRole.User, question, ct);
-            var blockedCount = await conversationMemory.AddMessageAsync(activeConversationId, ConversationMessageRole.Assistant, "I cannot assist with that request.", ct);
+            await conversationMemory.AddMessageAsync(activeConversationId, ConversationMessageRole.User, question, productIds: null, cancellationToken: ct);
+            var blockedCount = await conversationMemory.AddMessageAsync(activeConversationId, ConversationMessageRole.Assistant, "I cannot assist with that request.", productIds: null, cancellationToken: ct);
 
             return new AskResponse
             {
@@ -88,8 +89,10 @@ public sealed class AskService(
             };
         }
 
-        await conversationMemory.AddMessageAsync(activeConversationId, ConversationMessageRole.User, question, ct);
+        // 2. Save User Message (FIXED TYPO HERE)
+        await conversationMemory.AddMessageAsync(activeConversationId, ConversationMessageRole.User, question, productIds: null, cancellationToken: ct);
 
+        // 3. Hybrid Retrieval
         var retrieval = await hybrid.RetrieveAsync(
             question,
             topProducts ?? opts.TopProducts,
@@ -104,10 +107,11 @@ public sealed class AskService(
             .Select(id => cards[id])
             .ToList();
 
+        // 4. Handle No Results
         if (products.Count == 0)
         {
             var noResultsCount = await conversationMemory.AddMessageAsync(
-                activeConversationId, ConversationMessageRole.Assistant, opts.NoResultsAnswer, ct);
+                activeConversationId, ConversationMessageRole.Assistant, opts.NoResultsAnswer, productIds: null, cancellationToken: ct);
 
             return new AskResponse
             {
@@ -121,19 +125,24 @@ public sealed class AskService(
             };
         }
 
-        var productIds = products.Select(p => p.ProductId).ToHashSet();
+        // 5. Filter Chunks & Build Prompt
+        var productIds = products.Select(p => p.ProductId).ToList();
+        var productIdsSet = productIds.ToHashSet();
+
         var chunks = retrieval.Chunks
-            .Where(c => productIds.Contains(c.ProductId))
+            .Where(c => productIdsSet.Contains(c.ProductId))
             .ToList();
 
         var userPrompt = prompts.BuildUserPrompt(question, products, chunks, memory);
 
+        // 6. Generate Answer
         IAnswerGenerator generator = generatorResolver.Resolve();
         var raw = await generator.GenerateAsync(prompts.SystemPrompt, userPrompt, ct);
         var answer = UrlPattern.Replace(raw, "").Trim();
 
+        // 7. Save Assistant Message WITH Product IDs for history reconstruction
         var conversationCount = await conversationMemory.AddMessageAsync(
-            activeConversationId, ConversationMessageRole.Assistant, answer, ct);
+            activeConversationId, ConversationMessageRole.Assistant, answer, productIds: productIds, cancellationToken: ct);
 
         sw.Stop();
 

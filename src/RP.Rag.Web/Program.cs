@@ -4,22 +4,19 @@ using Microsoft.EntityFrameworkCore;
 using RP.Rag.Application.Models;
 using RP.Rag.Infrastructure.Data;
 using RP.Rag.Web.Components;
+using RP.Rag.Web.Middleware;
 using RP.Rag.Web.Services;
 using RP.RAG.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ============================================================
-// 1. پیکربندی سرویس‌ها
+// 1. Services
 // ============================================================
 
-// خواندن لیست کاربران از appsettings.json
 builder.Services.Configure<List<AppUser>>(builder.Configuration.GetSection("AppUsers"));
-
-// ثبت سرویس‌های لایه Infrastructure (EF Core, Elasticsearch, Ollama, Laya, ...)
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// احراز هویت مبتنی بر کوکی (Cookie Authentication)
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -33,30 +30,18 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 builder.Services.AddAuthorization();
-
-// برای دسترسی به HttpContext درون کامپوننت‌های Blazor (مثلاً در Logout)
 builder.Services.AddHttpContextAccessor();
-
-// سرویس سفارشی لاگین / لاگ‌اوت
 builder.Services.AddScoped<AuthService>();
-
-// AuthenticationStateProvider برای کار کردن <AuthorizeView> و @attribute [Authorize]
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-
-// پشتیبانی از Cascade Authentication State در کل درخت کامپوننت‌ها
 builder.Services.AddCascadingAuthenticationState();
 
-// Blazor Razor Components با حالت Interactive Server
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// ============================================================
-// 2. ساخت اپلیکیشن
-// ============================================================
 var app = builder.Build();
 
 // ============================================================
-// 3. اعمال Migration در محیط Development (اختیاری ولی مفید)
+// 2. Auto migration (Development only)
 // ============================================================
 if (app.Environment.IsDevelopment())
 {
@@ -69,37 +54,64 @@ if (app.Environment.IsDevelopment())
     catch (Exception ex)
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogWarning(ex, "Automatic migration failed. You may need to run 'dotnet ef database update' manually.");
+        logger.LogWarning(ex, "Auto migration failed. Run 'dotnet ef database update' manually.");
     }
 }
 
 // ============================================================
-// 4. پیکربندی Pipeline میان‌افزارها (Middleware)
+// 3. Middleware Pipeline
 // ============================================================
+
+// Custom exception middleware MUST be first
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    app.UseExceptionHandler("/error", createScopeForErrors: true);
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-// ضد جعل (Antiforgery) برای فرم‌ها و درخواست‌های Blazor
 app.UseAntiforgery();
-
-// ترتیب احراز هویت و مجوزدهی بسیار مهم است
 app.UseAuthentication();
 app.UseAuthorization();
 
 // ============================================================
-// 5. Map کردن Razor Components
+// 4. Authentication Endpoints (NEW HTTP requests, no header issues)
+// ============================================================
+
+// Login endpoint: receives the REAL form POST from Login.razor
+app.MapPost("/auth/login", async (HttpContext context, AuthService auth) =>
+{
+    var form = await context.Request.ReadFormAsync();
+    var username = form["username"].ToString();
+    var password = form["password"].ToString();
+
+    var user = auth.Validate(username, password);
+
+    if (user is null)
+    {
+        return Results.Redirect("/login?error=" + Uri.EscapeDataString("Invalid username or password"));
+    }
+
+    await auth.SignInAsync(user, context);
+    return Results.Redirect("/");
+})
+.DisableAntiforgery(); // Disable antiforgery for this simple login form
+
+// Logout endpoint
+app.MapPost("/auth/logout", async (HttpContext context) =>
+{
+    await AuthService.SignOutAsync(context);
+    return Results.Redirect("/login");
+})
+.DisableAntiforgery();
+
+// ============================================================
+// 5. Razor Components
 // ============================================================
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-// ============================================================
-// 6. اجرای اپلیکیشن
-// ============================================================
 app.Run();

@@ -1,82 +1,161 @@
 ﻿@page "/chat/{ConversationId:guid}"
-@using RP.RAG.Application.Ask
 @attribute [Authorize]
-@inject IAskService AskService
+@inject RP.RAG.Application.Ask.IAskService AskService
 @inject RP.Rag.Application.Conversations.IConversationMemoryService ConversationService
+@inject RP.RAG.Application.Catalog.IProductCatalogService CatalogService
+@inject AuthenticationStateProvider AuthStateProvider
 
 <div class="d-flex flex-column" style="height: calc(100vh - 150px);">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3>چت با دستیار کاتالوگ</h3>
+        <h3>Chat with Catalog Assistant</h3>
         @if (lastResponseTimeMs > 0)
         {
-            <span class="badge bg-info">زمان پاسخ: @lastResponseTimeMs ms</span>
+            <span class="badge bg-info">Last Response: @lastResponseTimeMs ms</span>
         }
     </div>
 
-    <div class="flex-grow-1 overflow-auto border rounded p-3 mb-3" style="background-color: #f8f9fa;">
+    <div class="flex-grow-1 overflow-auto border rounded p-4 mb-3 bg-light">
         @foreach (var msg in messages)
         {
-            <div class="mb-3 d-flex @(msg.Role == "user" ? "justify-content-start" : "justify-content-end")">
-                <div class="p-2 rounded shadow-sm" style="max-width: 70%; @(msg.Role == "user" ? "background-color: #d1e7dd;" : "background-color: #cfe2ff;")">
-                    <strong>@(msg.Role == "user" ? "شما" : "دستیار"):</strong>
-                    <p class="mb-0">@msg.Content</p>
+            <div class="mb-4 @(msg.Role == "user" ? "border-start border-primary border-4 ps-3" : "border-start border-success border-4 ps-3")">
+                <div class="d-flex align-items-center mb-2">
+                    <strong class="@(msg.Role == "user" ? "text-primary" : "text-success")">
+                        @(msg.Role == "user" ? "👤 You" : "🤖 Assistant")
+                    </strong>
                     @if (!string.IsNullOrEmpty(msg.ElapsedTimeMs))
                     {
-                        <small class="text-muted">@msg.ElapsedTimeMs ms</small>
+                        <span class="badge bg-secondary ms-2">@msg.ElapsedTimeMs ms</span>
+                    }
+                </div>
+
+                <div class="message-content">
+                    <p class="mb-0" style="white-space: pre-wrap;">@msg.Content</p>
+
+                    @* ✅ Show product cards if available *@
+                    @if (msg.Products is { Count: > 0 })
+                    {
+                        <hr class="my-3" />
+                        <h6 class="text-muted">📦 Referenced Products</h6>
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mt-1">
+                            @for (int i = 0; i < msg.Products.Count; i++)
+                            {
+                                var product = msg.Products[i];
+                                <div class="col">
+                                    <div class="card h-100 shadow-sm border-primary">
+                                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-primary">[@(i + 1)]</span>
+                                            <small class="text-muted">@product.CategoryName</small>
+                                        </div>
+                                        <div class="card-body">
+                                            <h6 class="card-title fw-bold">@product.Name</h6>
+                                            <p class="card-text small text-muted">@product.Summary</p>
+                                            <ul class="list-unstyled small mb-0">
+                                                <li><strong>SKU:</strong> <code>@product.Sku</code></li>
+                                                <li><strong>Price:</strong> <span class="text-success fw-bold">$@product.Price.ToString("N2")</span></li>
+                                                <li>
+                                                    <strong>Stock:</strong>
+                                                    @if (product.InStock)
+                                                    {
+                                                        <span class="badge bg-success">In Stock (@product.StockCount)</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-danger">Out of Stock</span>
+                                                    }
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     }
                 </div>
             </div>
         }
     </div>
 
-    <div class="input-group">
-        <input type="text" class="form-control" placeholder="سوال خود را بپرسید..." @bind="newMessage" @onkeydown="HandleKeyDown" />
+    <div class="input-group input-group-lg">
+        <input type="text" class="form-control" placeholder="Ask your question..."
+               @bind="newMessage" @onkeydown="HandleKeyDown" disabled="@isSending" />
         <button class="btn btn-primary" @onclick="SendMessage" disabled="@isSending">
             @if (isSending)
             {
                 <span class="spinner-border spinner-border-sm"></span>
             }
-            ارسال
+            else
+            {
+
+                <span>Send</span>
+            }
         </button>
     </div>
 </div>
 
 @code {
     [Parameter] public Guid ConversationId { get; set; }
+
     private List<ChatMessageDto> messages = new();
     private string newMessage = "";
     private bool isSending = false;
     private long lastResponseTimeMs = 0;
+    private string? currentUserId;
 
     private sealed class ChatMessageDto
     {
         public string Role { get; set; } = "";
         public string Content { get; set; } = "";
         public string? ElapsedTimeMs { get; set; }
+        public IReadOnlyList<RP.RAG.Application.Catalog.ProductCard>? Products { get; set; }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        var userId = GetUserId();
-        var conversation = await ConversationService.GetAsync(userId, ConversationId);
-        if (conversation is null)
+        // ✅ FIX 1: Use AuthenticationStateProvider instead of HttpContextAccessor
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        currentUserId = authState.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(currentUserId)) return;
+
+        var conversation = await ConversationService.GetAsync(currentUserId, ConversationId);
+        if (conversation is null) return;
+
+        // ✅ FIX 2: Load messages AND re-fetch product cards from DB
+        messages = new List<ChatMessageDto>();
+
+        foreach (var m in conversation.Messages)
         {
-            return;
+            var dto = new ChatMessageDto
+            {
+                Role = m.Role,
+                Content = m.Content
+            };
+
+            // If this message has product IDs, fetch current cards from PostgreSQL
+            if (m.ProductIds is { Count: > 0 })
+            {
+                var cards = await CatalogService.GetCardsAsync(m.ProductIds, onlyActive: true);
+                dto.Products = m.ProductIds
+                    .Where(id => cards.ContainsKey(id))
+                    .Select(id => cards[id])
+                    .ToList();
+            }
+
+            messages.Add(dto);
         }
 
-        messages = conversation.Messages
-            .Select(m => new ChatMessageDto { Role = m.Role, Content = m.Content })
-            .ToList();
+        StateHasChanged();
     }
 
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
-        if (e.Key == "Enter") await SendMessage();
+        if (e.Key == "Enter" && !e.ShiftKey) await SendMessage();
     }
 
     private async Task SendMessage()
     {
-        if (string.IsNullOrWhiteSpace(newMessage)) return;
+        if (string.IsNullOrWhiteSpace(newMessage) || isSending || string.IsNullOrEmpty(currentUserId))
+            return;
 
         isSending = true;
         var question = newMessage;
@@ -84,24 +163,31 @@
         messages.Add(new ChatMessageDto { Role = "user", Content = question });
         StateHasChanged();
 
-        var userId = GetUserId();
-        var response = await AskService.AskAsync(userId, question, topProducts: 5, conversationId: ConversationId);
-
-        lastResponseTimeMs = response.TookMs;
-        messages.Add(new ChatMessageDto
+        try
         {
-            Role = "assistant",
-            Content = response.Answer,
-            ElapsedTimeMs = response.TookMs.ToString()
-        });
+            var response = await AskService.AskAsync(
+                currentUserId, question, topProducts: 5, conversationId: ConversationId);
+
+            lastResponseTimeMs = response.TookMs;
+
+            messages.Add(new ChatMessageDto
+            {
+                Role = "assistant",
+                Content = response.Answer,
+                ElapsedTimeMs = response.TookMs.ToString(),
+                Products = response.Products  // ✅ Cards from live response
+            });
+        }
+        catch (Exception ex)
+        {
+            messages.Add(new ChatMessageDto
+            {
+                Role = "assistant",
+                Content = $"An error occurred: {ex.Message}"
+            });
+        }
 
         isSending = false;
         StateHasChanged();
-    }
-
-    private string GetUserId()
-    {
-        var httpContext = HttpContextAccessor.HttpContext;
-        return httpContext?.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "";
     }
 }

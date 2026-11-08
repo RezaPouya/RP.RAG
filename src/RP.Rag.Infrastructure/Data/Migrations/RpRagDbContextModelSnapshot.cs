@@ -81,6 +81,9 @@ namespace RP.Rag.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("ProductIdsJson")
+                        .HasColumnType("jsonb");
+
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasMaxLength(20)

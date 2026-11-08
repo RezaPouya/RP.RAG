@@ -1,7 +1,5 @@
 ﻿@using RP.Rag.Web.Services
 @inherits LayoutComponentBase
-@inject NavigationManager Nav
-@inject AuthService AuthService
 @inject IHttpContextAccessor HttpContextAccessor
 
 <div class="d-flex flex-column min-vh-100">
@@ -13,16 +11,19 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><NavLink class="nav-link" href="/" Match="NavLinkMatch.All">جستجو</NavLink></li>
-                    <li class="nav-item"><NavLink class="nav-link" href="/conversations">گفتگوهای من</NavLink></li>
+                    <li class="nav-item"><NavLink class="nav-link" href="/" Match="NavLinkMatch.All">Search</NavLink></li>
+                    <li class="nav-item"><NavLink class="nav-link" href="/conversations">My Conversations</NavLink></li>
                 </ul>
                 <AuthorizeView>
                     <Authorized>
                         <span class="navbar-text me-3">@context.User.Identity?.Name</span>
-                        <button class="btn btn-outline-light btn-sm" @onclick="Logout">خروج</button>
+                        <!-- Logout as a REAL form POST, not a Blazor button -->
+                        <form method="post" action="/auth/logout" class="d-inline">
+                            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                        </form>
                     </Authorized>
                     <NotAuthorized>
-                        <a class="btn btn-outline-light btn-sm" href="/login">ورود</a>
+                        <a class="btn btn-outline-light btn-sm" href="/login">Login</a>
                     </NotAuthorized>
                 </AuthorizeView>
             </div>
@@ -30,22 +31,18 @@
     </nav>
 
     <main class="container mt-4 flex-grow-1">
-        @Body
+        <ErrorBoundary>
+            <ChildContent>@Body</ChildContent>
+            <ErrorContent Context="ex">
+                <div class="alert alert-danger mt-4">
+                    <h5>An error occurred while rendering this page.</h5>
+                    <p>@ex.Message</p>
+                </div>
+            </ErrorContent>
+        </ErrorBoundary>
     </main>
 
     <footer class="bg-light py-3 text-center">
         <div class="container">RP.RAG - @DateTime.Now.Year</div>
     </footer>
 </div>
-
-@code {
-    private async Task Logout()
-    {
-        var httpContext = HttpContextAccessor.HttpContext;
-        if (httpContext is not null)
-        {
-            await AuthService.SignOutAsync(httpContext);
-            Nav.NavigateTo("/login", forceLoad: true);
-        }
-    }
-}

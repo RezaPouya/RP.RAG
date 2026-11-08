@@ -113,6 +113,55 @@ Do not store secrets, credentials, or sensitive personal data. Use empty arrays 
             .ExecuteDeleteAsync(cancellationToken) > 0;
     }
 
+    public async Task<int> AddMessageAsync(
+    Guid conversationId,
+    ConversationMessageRole role,
+    string content,
+    IReadOnlyList<int>? productIds = null,
+    CancellationToken cancellationToken = default)
+    {
+        await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
+        await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken);
+
+        await using var command = db.Database.GetDbConnection().CreateCommand();
+        command.Transaction = transaction.GetDbTransaction();
+        command.CommandText = "SELECT 1 FROM \"Conversations\" WHERE \"Id\" = @conversationId FOR UPDATE";
+
+        var idParameter = command.CreateParameter();
+        idParameter.ParameterName = "conversationId";
+        idParameter.Value = conversationId;
+        command.Parameters.Add(idParameter);
+
+        var lockedConversation = await command.ExecuteScalarAsync(cancellationToken);
+        var conversation = lockedConversation is null
+            ? null
+            : await db.Conversations.SingleOrDefaultAsync(x => x.Id == conversationId, cancellationToken);
+
+        if (conversation is null)
+            throw new KeyNotFoundException($"Conversation '{conversationId}' was not found.");
+
+        var sequence = conversation.MessageCount + 1;
+
+        db.ConversationMessages.Add(new ConversationMessage
+        {
+            ConversationId = conversationId,
+            Sequence = sequence,
+            Role = role.ToString().ToLowerInvariant(),
+            Content = content,
+            CreatedAt = DateTime.UtcNow,
+            ProductIdsJson = productIds is { Count: > 0 }
+                ? JsonSerializer.Serialize(productIds)
+                : null
+        });
+
+        conversation.MessageCount = sequence;
+        conversation.UpdatedAt = DateTime.UtcNow;
+
+        await db.SaveChangesAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+
+        return sequence;
+    }
     public async Task<ConversationMemory?> GetMemoryAsync(Guid conversationId,
         CancellationToken cancellationToken = default)
     {
@@ -141,52 +190,6 @@ Do not store secrets, credentials, or sensitive personal data. Use empty arrays 
             ReadJson<EpisodicMemoryItem>(conversation.EpisodicMemoryJson));
     }
 
-    public async Task<int> AddMessageAsync(
-        Guid conversationId,
-        ConversationMessageRole role,
-        string content,
-        CancellationToken cancellationToken = default)
-    {
-        await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
-        await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken);
-
-        await using var command = db.Database.GetDbConnection().CreateCommand();
-        command.Transaction = transaction.GetDbTransaction();
-        command.CommandText = "SELECT 1 FROM \"Conversations\" WHERE \"Id\" = @conversationId FOR UPDATE";
-
-        var idParameter = command.CreateParameter();
-        idParameter.ParameterName = "conversationId";
-        idParameter.Value = conversationId;
-        command.Parameters.Add(idParameter);
-
-        var lockedConversation = await command.ExecuteScalarAsync(cancellationToken);
-
-        var conversation = lockedConversation is null
-            ? null
-            : await db.Conversations.SingleOrDefaultAsync(x => x.Id == conversationId, cancellationToken);
-
-        if (conversation is null)
-            throw new KeyNotFoundException($"Conversation '{conversationId}' was not found.");
-
-        var sequence = conversation.MessageCount + 1;
-
-        db.ConversationMessages.Add(new ConversationMessage
-        {
-            ConversationId = conversationId,
-            Sequence = sequence,
-            Role = role.ToString().ToLowerInvariant(),
-            Content = content,
-            CreatedAt = DateTime.UtcNow
-        });
-
-        conversation.MessageCount = sequence;
-        conversation.UpdatedAt = DateTime.UtcNow;
-
-        await db.SaveChangesAsync(cancellationToken);
-        await transaction.CommitAsync(cancellationToken);
-
-        return sequence;
-    }
 
     public async Task DistillIfNeededAsync(Guid conversationId, CancellationToken cancellationToken = default)
     {
@@ -381,7 +384,14 @@ Do not store secrets, credentials, or sensitive personal data. Use empty arrays 
     }
 
     private static System.Linq.Expressions.Expression<Func<ConversationMessage, ConversationMessageDto>> ToDtoProjection() =>
-        message => new ConversationMessageDto(message.Sequence, message.Role, message.Content, message.CreatedAt);
+        message => new ConversationMessageDto(
+            message.Sequence,
+            message.Role,
+            message.Content,
+            message.CreatedAt,
+            message.ProductIdsJson != null
+                ? System.Text.Json.JsonSerializer.Deserialize<List<int>>(message.ProductIdsJson)
+                : null);
 
     private static ConversationDetails ToDetails(
         Conversation conversation,
