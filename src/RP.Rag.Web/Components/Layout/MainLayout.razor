@@ -1,0 +1,48 @@
+﻿@using RP.Rag.Web.Services
+@inherits LayoutComponentBase
+@inject IHttpContextAccessor HttpContextAccessor
+
+<div class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">RP.RAG</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><NavLink class="nav-link" href="/" Match="NavLinkMatch.All">Search</NavLink></li>
+                    <li class="nav-item"><NavLink class="nav-link" href="/conversations">My Conversations</NavLink></li>
+                </ul>
+                <AuthorizeView>
+                    <Authorized>
+                        <span class="navbar-text me-3">@context.User.Identity?.Name</span>
+                        <!-- Logout as a REAL form POST, not a Blazor button -->
+                        <form method="post" action="/auth/logout" class="d-inline">
+                            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                        </form>
+                    </Authorized>
+                    <NotAuthorized>
+                        <a class="btn btn-outline-light btn-sm" href="/login">Login</a>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mt-4 flex-grow-1">
+        <ErrorBoundary>
+            <ChildContent>@Body</ChildContent>
+            <ErrorContent Context="ex">
+                <div class="alert alert-danger mt-4">
+                    <h5>An error occurred while rendering this page.</h5>
+                    <p>@ex.Message</p>
+                </div>
+            </ErrorContent>
+        </ErrorBoundary>
+    </main>
+
+    <footer class="bg-light py-3 text-center">
+        <div class="container">RP.RAG - @DateTime.Now.Year</div>
+    </footer>
+</div>

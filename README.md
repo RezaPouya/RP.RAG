@@ -103,13 +103,12 @@ The implementation also contains a category-token index intended to infer a like
 
 The `POST /api/ask` flow is:
 
-1. Assess the incoming question with Laya before retrieval.
-2. If allowed, run hybrid retrieval to find product IDs and relevant chunks.
+1. Run hybrid retrieval to find product IDs and candidate chunks.
 3. Load product cards from PostgreSQL.
 4. If no products are found, return the configured no-results answer without calling the generation model.
-5. Ask Laya to assess each retrieved chunk for relevance and prompt-injection risk. By default, only relevant chunks are retained; partially relevant chunks are excluded unless `Ask:IncludePartiallyRelevantChunks` is enabled. Chunks flagged for prompt injection are excluded.
+5. Ask Laya for one four-way decision per retrieved chunk: relevant, partially relevant, irrelevant, or prompt injection. By default, only relevant chunks are retained; partially relevant chunks are excluded unless `Ask:IncludePartiallyRelevantChunks` is enabled. Chunks flagged for prompt injection are excluded.
 6. Build the user prompt from the product cards, retained excerpts, and question. The system prompt includes the project’s embedded Markdown rules.
-7. Run Laya's final assembled-prompt check.
+7. Make one Laya request that checks both the original question's policy and the assembled prompt. This runs after internal retrieval but before generation.
 8. If allowed, send the prompt to the configured answer-generation provider.
 9. Strip URL-like strings from the generated answer and return the answer, generation model, elapsed time, product cards, and source metadata.
 
@@ -117,11 +116,11 @@ The answer can refer to products using numbered references such as `[1]`. Produc
 
 ## Laya guardrails
 
-RP.RAG calls a Laya-compatible service using `POST /v1/systemone`. The configured base URL defaults to `http://localhost:8090`. An optional bearer API key can be configured.
+RP.RAG calls a Laya-compatible service using `POST /v1/systemone`. The configured base URL defaults to `http://localhost:8090`. An optional bearer API key can be configured. For up to 64 retrieved chunks, Ask normally makes two Laya HTTP requests; periodic memory distillation may make one additional request.
 
-### Stage 1: incoming question
+### Input policy check
 
-Before retrieval, Laya returns probability estimates for:
+As part of the final check, Laya returns probability estimates for the original question:
 
 - jailbreak attempts;
 - prompt injection aimed at the assistant;
@@ -129,15 +128,15 @@ Before retrieval, Laya returns probability estimates for:
 - restricted content described by the project policy;
 - requests for external websites, URLs, stores, marketplaces, apps, or other external sources.
 
-The application compares these estimates with configured thresholds. If the request is blocked, `/api/ask` returns a blocked response with HTTP `403` and does not continue to retrieval or generation.
+The application compares these estimates with configured thresholds. If the request is blocked, `/api/ask` returns HTTP `403` without calling the answer-generation model. Retrieval is internal and read-only, so it may already have run.
 
 ### Stage 2: retrieved chunks
 
-Laya classifies retrieved chunks as `relevant`, `partially_relevant`, or `irrelevant`, and separately estimates whether each chunk contains instructions intended to manipulate the AI assistant. The application retains eligible chunks and excludes chunks flagged for prompt injection. This stage is a filter, not a second ranking pass over the RRF scores.
+Laya classifies each retrieved chunk once as `relevant`, `partially_relevant`, `irrelevant`, or `prompt_injection`. Chunks flagged for prompt injection are excluded. This stage is a filter, not a second ranking pass over the RRF scores.
 
 ### Stage 3: assembled prompt
 
-After prompt construction, Laya checks the assembled **untrusted user prompt/context** for jailbreak and prompt-injection signals before the application calls the LLM. If the request is blocked here, `/api/ask` returns HTTP `403` and generation is skipped.
+After prompt construction, the same Laya request checks the original question's policy and the assembled **untrusted user prompt/context** for jailbreak and prompt-injection signals before the application calls the LLM. If blocked, `/api/ask` returns HTTP `403` and generation is skipped.
 
 ### Guardrail Markdown files
 

@@ -1,0 +1,36 @@
+﻿@using Markdig
+@using System.Text.RegularExpressions
+@using RP.RAG.Application.Catalog
+
+@((MarkupString)RenderMarkdown())
+
+@code {
+    [Parameter] public string Content { get; set; } = "";
+    [Parameter] public IReadOnlyList<ProductCard>? Products { get; set; }
+
+    private static readonly MarkdownPipeline Pipeline = new MarkdownPipelineBuilder()
+        .UseAdvancedExtensions()
+        .Build();
+
+    private string RenderMarkdown()
+    {
+        if (string.IsNullOrWhiteSpace(Content)) return "";
+
+        var markdown = Content;
+
+        // Convert [n] references to clickable anchor links
+        if (Products is { Count: > 0 })
+        {
+            for (int i = 0; i < Products.Count; i++)
+            {
+                var refNum = i + 1;
+                markdown = Regex.Replace(
+                    markdown,
+                    $@"\[{refNum}\](?!\()",
+                    $@"<a href=""#product-{refNum}"" class=""fw-bold text-primary text-decoration-none"">[{refNum}]</a>");
+            }
+        }
+
+        return Markdown.ToHtml(markdown, Pipeline);
+    }
+}

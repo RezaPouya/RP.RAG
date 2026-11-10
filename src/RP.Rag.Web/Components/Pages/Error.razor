@@ -1,0 +1,21 @@
+﻿@page "/error"
+@inject NavigationManager Nav
+
+<div class="container mt-5">
+    <div class="card border-danger">
+        <div class="card-header bg-danger text-white">
+            <h4>Error</h4>
+        </div>
+        <div class="card-body">
+            <p class="card-text">@Message</p>
+            <button class="btn btn-primary" @onclick="GoHome">Back to Home</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    public string? Message { get; set; }
+
+    private void GoHome() => Nav.NavigateTo("/", forceLoad: true);
+}

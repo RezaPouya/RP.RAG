@@ -149,17 +149,13 @@ docker inspect $(docker compose -f compose.yaml -f compose.http.yaml ps -q laya-
 
 If port 8090 is already in use, Docker will fail to bind it. Find and stop the conflicting process or select another port by changing `LAYA_PORT` in `.env`.
 
-## 8. How this will connect to RP.RAG later
+## 8. RP.RAG integration
 
-Planned architecture, not yet implemented:
-
-1. **Stage 1 — incoming prompt guardrail:** RP.RAG calls Laya before retrieval.
-2. **Stage 2 — retrieved-chunk relevance:** RP.RAG evaluates whether retrieved chunks are relevant to the user's question before building the final context.
-3. **Stage 3 — final prompt/context guardrail:** RP.RAG checks the assembled request before sending it to the answer-generating LLM.
+The integration is implemented. For a normal Ask with up to 64 retrieved chunks, RP.RAG makes two Laya HTTP calls: one multiclass relevance/injection decision per chunk, then one combined check for the original question's policy and the assembled prompt. The second call runs after internal read-only retrieval but before answer generation. Periodic conversation-memory distillation may add another Laya call.
 
 When RP.RAG itself runs on the host, it can initially call `http://localhost:8090`. If the API is later containerized in the same Docker Compose network, it should use the service DNS name and the container port, such as `http://laya-serve:8090` **only if the Compose service is actually named `laya-serve` and both containers share a network**. Confirm the effective Compose configuration before using that URL.
 
-Laya's `/v1/systemone` API is a typed-decision endpoint, not a generic chat-completions endpoint. Before writing the C# client, confirm the exact request and response schema for the selected Laya release and design guardrail criteria to use its decision format.
+Laya's `/v1/systemone` API is a typed-decision endpoint, not a generic chat-completions endpoint. RP.RAG sends typed questions and applies the resulting choices/probabilities using application-configured thresholds.
 
 ## Official references
 

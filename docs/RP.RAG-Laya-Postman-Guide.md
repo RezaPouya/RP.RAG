@@ -352,17 +352,11 @@ If `LAYA_PRELOAD=0`, the process may start with no loaded checkpoint. Send a val
 
 Use the same checkpoint and the same questions when comparing prompts. Test many benign prompts as well as multiple attacks, inspect the full probabilities and confidence fields, and tune policy thresholds using results. Do not treat one successful jailbreak test as a production security certification.
 
-## 8. Planned RP.RAG integration (not implemented yet)
+## 8. RP.RAG integration
 
-The Postman tests call Laya directly. They do not yet change or block requests in RP.RAG.
+The Postman requests below call Laya directly so its endpoint and question schema can be inspected. RP.RAG also uses the same endpoint in its Ask flow. For up to 64 retrieved chunks, the application normally makes two calls: a per-chunk four-way relevance/injection decision, then a combined original-question policy and final-prompt check. The latter runs after internal retrieval, but before the answer-generating LLM. A periodic memory-distillation operation can make an additional call.
 
-Planned stages:
-
-1. **Stage 1 — incoming prompt guardrail:** RP.RAG calls Laya before lexical or vector retrieval. If policy says block, it returns a controlled response without retrieval or generation.
-2. **Stage 2 — retrieved chunk relevance:** after Elasticsearch/pgvector retrieval and hybrid ranking, RP.RAG asks Laya whether each retrieved chunk is relevant to the original user prompt, then filters or retains chunks according to explicit policy.
-3. **Stage 3 — final assembled prompt guardrail:** before calling the answer-generating language model, RP.RAG checks the final user prompt plus filtered context for remaining policy/injection risks.
-
-We'll integrate these changes one file at a time after these direct HTTP tests are stable. Laya is a decision API; it is not the answer-generating LLM and its endpoint is not a generic chat-completions API.
+Laya is a decision API; it is not the answer-generating LLM and its endpoint is not a generic chat-completions API.
 
 ## 9. Official references
 

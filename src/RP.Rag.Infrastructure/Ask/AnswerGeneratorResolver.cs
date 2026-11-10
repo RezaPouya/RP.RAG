@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RP.Rag.Infrastructure.Ask;
 using RP.RAG.Application.Ask;
 
 namespace RP.RAG.Infrastructure.Ask;

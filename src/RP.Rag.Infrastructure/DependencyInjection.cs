@@ -2,7 +2,14 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using RP.Rag.Application.Conversations;
+using RP.Rag.Application.Guardrails;
+using RP.Rag.Infrastructure.Ask;
+using RP.Rag.Infrastructure.Conversations;
 using RP.Rag.Infrastructure.Data;
+using RP.Rag.Infrastructure.DeepSeeks;
+using RP.Rag.Infrastructure.Layas;
+using RP.Rag.Infrastructure.Ollama;
 using RP.Rag.Infrastructure.Search;
 using RP.Rag.Infrastructure.SeedData;
 using RP.RAG.Application.Ask;
@@ -58,7 +65,7 @@ public static class DependencyInjection
         services.AddScoped<IHybridSearch, HybridSearchService>();
         services.AddScoped<IProductCatalogService, ProductCatalogService>();
 
-        // Laya input guardrail
+        // Laya input guardrail only
         services.AddOptions<LayaOptions>()
             .BindConfiguration(LayaOptions.SectionName)
             .Validate(o => Uri.TryCreate(o.Url, UriKind.Absolute, out _), "Laya:Url must be an absolute URL.")
@@ -66,10 +73,23 @@ public static class DependencyInjection
             .Validate(o => o.JailbreakThreshold is >= 0 and <= 1, "Laya:JailbreakThreshold must be between 0 and 1.")
             .Validate(o => o.PromptInjectionThreshold is >= 0 and <= 1, "Laya:PromptInjectionThreshold must be between 0 and 1.")
             .Validate(o => o.PolicyViolationThreshold is >= 0 and <= 1, "Laya:PolicyViolationThreshold must be between 0 and 1.")
-            .Validate(o => o.ChunkPromptInjectionThreshold is >= 0 and <= 1, "Laya:ChunkPromptInjectionThreshold must be between 0 and 1.")
-            .Validate(o => o.FinalJailbreakThreshold is >= 0 and <= 1, "Laya:FinalJailbreakThreshold must be between 0 and 1.")
-            .Validate(o => o.FinalPromptInjectionThreshold is >= 0 and <= 1, "Laya:FinalPromptInjectionThreshold must be between 0 and 1.")
             .ValidateOnStart();
+
+        services.AddHttpClient(ServiceKeys.Laya, (sp, http) =>
+        {
+            var opts = sp.GetRequiredService<IOptions<LayaOptions>>().Value;
+
+            http.BaseAddress = new Uri(opts.Url.TrimEnd('/') + "/");
+            http.Timeout = TimeSpan.FromSeconds(opts.RequestTimeoutSeconds);
+
+            if (!string.IsNullOrWhiteSpace(opts.ApiKey))
+            {
+                http.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", opts.ApiKey);
+            }
+        });
+
+        services.AddScoped<IPromptGuardrail, LayaPromptGuardrail>();
 
         services.AddHttpClient(ServiceKeys.Laya, (sp, http) =>
         {
@@ -82,13 +102,11 @@ public static class DependencyInjection
                     new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", opts.ApiKey);
         });
 
-        services.AddScoped<IPromptGuardrail, LayaPromptGuardrail>();
-        services.AddScoped<IChunkRelevanceEvaluator, LayaChunkRelevanceEvaluator>();
-        services.AddScoped<IFinalPromptGuardrail, LayaFinalPromptGuardrail>();
 
         services.AddSingleton<CategoryTokenIndexCache>();
         services.AddScoped<CategoryTokenIndexBuilder>();
         services.AddHostedService<CategoryTokenIndexWarmupService>();
+        services.AddHostedService<ConversationDistillationWorker>();
 
         // Ollama
         services.AddOptions<OllamaOptions>()
@@ -130,7 +148,17 @@ public static class DependencyInjection
         services.AddOptions<AskOptions>()
             .BindConfiguration(AskOptions.SectionName);
 
+        services.AddOptions<ConversationOptions>()
+            .BindConfiguration(ConversationOptions.SectionName)
+            .Validate(o => o.RecentMessages > 0, "ConversationMemory:RecentMessages must be positive.")
+            .Validate(o => o.DistillAfterMessageCount > 0, "ConversationMemory:DistillAfterMessageCount must be positive.")
+            .Validate(o => o.MaxDistilledMemoryCharacters > 0, "ConversationMemory:MaxDistilledMemoryCharacters must be positive.")
+            .Validate(o => o.MaxSemanticFacts > 0, "ConversationMemory:MaxSemanticFacts must be positive.")
+            .Validate(o => o.MaxEpisodes > 0, "ConversationMemory:MaxEpisodes must be positive.")
+            .ValidateOnStart();
+
         services.AddSingleton<PromptBuilder>();
+        services.AddScoped<IConversationMemoryService, ConversationMemoryService>();
         services.AddScoped<IAskService, AskService>();
 
         services.AddScoped<SeedLoader>();
